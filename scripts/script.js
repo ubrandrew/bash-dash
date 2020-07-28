@@ -40,7 +40,6 @@ function createWordNode(word, wordIdx) {
 
 function start(event) {
   //start timer
-  console.log(activeWordIndex, wordsList[activeWordIndex]);
   let currentWord = wordsList[activeWordIndex];
   let currentInput = inputArea.value;
   let inputLength = currentInput.length;
@@ -63,10 +62,20 @@ function start(event) {
     `word-${activeWordIndex}-letter-${activeLetterIndex}`
   );
 
-  if (currentWord[activeLetterIndex] === event.key) {
-    currentLetter.className = "correct";
+  if (activeLetterIndex < currentWord.length) {
+    if (currentWord[activeLetterIndex] === event.key) {
+      currentLetter.className = "correct";
+    } else {
+      currentLetter.className = "incorrect";
+    }
   } else {
-    currentLetter.className = "incorrect";
+    console.log("extra");
+    const currentWordRef = document.getElementById(`word-${activeWordIndex}`);
+    const newLetter = document.createElement("span");
+    newLetter.id = `word-${activeWordIndex}-letter-${activeLetterIndex}`;
+    newLetter.className = "incorrect";
+    newLetter.innerText = event.key;
+    currentWordRef.appendChild(newLetter);
   }
   activeLetterIndex++;
 }
@@ -74,9 +83,15 @@ function start(event) {
 function handleDelete(event) {
   if (event.key === "Backspace") {
     if (activeLetterIndex > 0) activeLetterIndex--;
-    document.getElementById(
-      `word-${activeWordIndex}-letter-${activeLetterIndex}`
-    ).className = "";
+    if (activeLetterIndex < wordsList[activeWordIndex].length) {
+      document.getElementById(
+        `word-${activeWordIndex}-letter-${activeLetterIndex}`
+      ).className = "";
+    } else {
+      document
+        .getElementById(`word-${activeWordIndex}-letter-${activeLetterIndex}`)
+        .remove();
+    }
   }
 }
 function reset(e) {
