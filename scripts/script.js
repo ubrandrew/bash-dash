@@ -36,19 +36,20 @@ function createWordNode(word, wordIdx) {
   return wordNode;
 }
 
-// document.getElementById("words-pre").innerText = sampleText;
-
 function start(event) {
   //start timer
   let currentWord = wordsList[activeWordIndex];
   let currentInput = inputArea.value;
   let inputLength = currentInput.length;
-
+  if (event.code === "Enter") return;
   if (event.code === "Space") {
     if (inputLength == 0) {
       event.preventDefault();
       return;
     } else {
+      if (activeLetterIndex < currentWord.length) {
+        handleIncompleteWord(currentWord);
+      }
       inputHistory.push(inputArea.value);
       event.preventDefault();
       inputArea.value = "";
@@ -94,11 +95,25 @@ function handleDelete(event) {
     }
   }
 }
+
+function handleIncompleteWord(currentWord) {
+  console.log(activeLetterIndex, currentWord.length);
+  for (let i = activeLetterIndex; i < currentWord.length; i++) {
+    document.getElementById(`word-${activeWordIndex}-letter-${i}`).className =
+      "incorrect";
+  }
+}
+
 function reset(e) {
   //reset timer
   console.log(inputHistory);
+  wordsPre.innerHTML = "";
+  inputArea.value = "";
+  createWords();
   inputHistory = [];
   activeWordIndex = 0;
+  activeLetterIndex = 0;
+  inputArea.focus();
 }
 
 createWords();
