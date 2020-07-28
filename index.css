@@ -1,0 +1,29 @@
+body,
+html,
+.main-content {
+  height: 100%;
+  width: 100%;
+}
+
+.main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#words {
+  width: 70%;
+  margin: 0 auto;
+}
+
+#words-pre {
+  white-space: pre-wrap;
+}
+
+.correct {
+  color: green;
+}
+
+.incorrect {
+  color: red;
+}
