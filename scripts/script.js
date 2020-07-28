@@ -59,21 +59,26 @@ function start(event) {
     }
   }
 
-  console.log("current letter correct: ", currentWord[activeLetterIndex]);
-  console.log("current letter input: ", currentInput[activeLetterIndex]);
+  const currentLetter = document.getElementById(
+    `word-${activeWordIndex}-letter-${activeLetterIndex}`
+  );
 
   if (currentWord[activeLetterIndex] === event.key) {
-    document.getElementById(
-      `word-${activeWordIndex}-letter-${activeLetterIndex}`
-    ).className = "correct";
+    currentLetter.className = "correct";
   } else {
-    document.getElementById(
-      `word-${activeWordIndex}-letter-${activeLetterIndex}`
-    ).className = "incorrect";
+    currentLetter.className = "incorrect";
   }
   activeLetterIndex++;
 }
 
+function handleDelete(event) {
+  if (event.key === "Backspace") {
+    if (activeLetterIndex > 0) activeLetterIndex--;
+    document.getElementById(
+      `word-${activeWordIndex}-letter-${activeLetterIndex}`
+    ).className = "";
+  }
+}
 function reset(e) {
   //reset timer
   console.log(inputHistory);
@@ -83,6 +88,7 @@ function reset(e) {
 
 createWords();
 inputArea.addEventListener("keypress", start, false);
+inputArea.addEventListener("keydown", handleDelete, false);
 resetBtn.addEventListener("click", reset, false);
 words.addEventListener(
   "click",
