@@ -160,9 +160,18 @@ words.addEventListener(
 
 $("#input-area")
   .focusin(function () {
-    console.log("ASDF");
     $("#cursor").show();
   })
   .focusout(function () {
     $("#cursor").hide();
   });
+
+// necessary for safari tabbing to work (keycode 9 is tab)
+// whenever tab is pressed while input-area is in focus, focus reset button
+$("#input-area").on("keydown", function (e) {
+  if (e.keyCode == 9) {
+    resetBtn.focus();
+    e.preventDefault();
+    return false;
+  }
+});
