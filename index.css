@@ -1,6 +1,7 @@
 body,
 html,
 .main-content {
+  margin: 0;
   height: 100%;
   width: 100%;
 }
@@ -9,16 +10,23 @@ html,
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 
 #words {
   max-width: 70%;
   min-width: 70%;
   margin: 0 auto;
+  overflow: hidden;
 }
 
 #words-pre {
+  height: 3em;
+  line-height: 1.5em;
   white-space: pre-wrap;
+  padding: 10px 0;
+  font-size: 1.25em;
+  min-width: 100%;
 }
 
 .correct {
@@ -27,4 +35,43 @@ html,
 
 .incorrect {
   color: red;
+}
+
+.container {
+  width: 100%;
+}
+
+#input-area {
+  width: 0px;
+  height: 0px;
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
+#input-area:focus {
+  border: none;
+}
+
+#cursor {
+  position: absolute;
+  width: 2px;
+  height: 1.25em;
+  background-color: purple;
+  animation-name: blink;
+  animation-duration: 1000ms;
+  animation-iteration-count: infinite;
+  opacity: 1;
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

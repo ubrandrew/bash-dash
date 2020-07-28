@@ -5,22 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>bash-dash</title>
     <link rel="stylesheet" href="index.css" />
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"
+      defer
+    ></script>
     <script src="scripts/test.js" defer></script>
     <script src="scripts/script.js" defer></script>
   </head>
   <body>
     <div class="main-content">
-      <div>
+      <div class="container">
         <div id="words">
+          <div id="cursor"></div>
           <pre id="words-pre"></pre>
         </div>
-        <br />
         <div id="input-wrapper">
           <input id="input-area" />
         </div>
+      </div>
+      <div>
         <button id="reset-btn">Reset</button>
       </div>
     </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
   </body>
 </html>

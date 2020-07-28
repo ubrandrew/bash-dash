@@ -3,24 +3,26 @@ const inputArea = document.getElementById("input-area");
 const words = document.getElementById("words");
 const wordsPre = document.getElementById("words-pre");
 const resetBtn = document.getElementById("reset-btn");
+const preOffset = wordsPre.offsetTop;
 
 const sampleText =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
 const wordsList = sampleText.split(" ");
-
 let activeWordIndex = 0;
 let activeLetterIndex = 0;
 let inputHistory = [];
+let shiftIndex = 0;
 
 function createWords() {
   for (let i = 0; i < wordsList.length; i++) {
     const word = wordsList[i];
     console.log(i, word);
     const wordNode = createWordNode(word, i);
-    if (i === 0) wordNode.className = "active-word";
     wordNode.id = `word-${i}`;
     wordsPre.appendChild(wordNode);
-    wordsPre.innerHTML += " ";
+    const space = document.createElement("span");
+    space.innerText = " ";
+    wordsPre.appendChild(space);
   }
 }
 
@@ -53,8 +55,13 @@ function start(event) {
       inputHistory.push(inputArea.value);
       event.preventDefault();
       inputArea.value = "";
-      activeWordIndex += 1;
+      activeWordIndex++;
       activeLetterIndex = 0;
+
+      if (checkShift()) {
+        shift();
+      }
+
       return;
     }
   }
@@ -104,6 +111,28 @@ function handleIncompleteWord(currentWord) {
   }
 }
 
+function checkShift() {
+  const wordOffset = document.getElementById(`word-${activeWordIndex}`)
+    .offsetTop;
+  const fontSize = $("#words-pre").css("font-size");
+  const lineHeight = parseFloat(fontSize.replace("px", "")) * 1.5;
+  if (wordOffset - preOffset >= 2 * lineHeight) {
+    console.log("SHIFT!");
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function shift() {
+  let children = wordsPre.children;
+  console.log(children, activeWordIndex);
+  for (let i = shiftIndex; i < 2 * activeWordIndex; i++) {
+    children[0].remove();
+  }
+  shiftIndex = 2 * activeWordIndex;
+}
+
 function reset(e) {
   //reset timer
   console.log(inputHistory);
@@ -113,6 +142,7 @@ function reset(e) {
   inputHistory = [];
   activeWordIndex = 0;
   activeLetterIndex = 0;
+  shiftIndex = 0;
   inputArea.focus();
 }
 
@@ -127,3 +157,12 @@ words.addEventListener(
   },
   false
 );
+
+$("#input-area")
+  .focusin(function () {
+    console.log("ASDF");
+    $("#cursor").show();
+  })
+  .focusout(function () {
+    $("#cursor").hide();
+  });
