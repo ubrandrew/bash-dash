@@ -21,12 +21,11 @@ let incorrectChars = 0;
 function createWords() {
   for (let i = 0; i < wordsList.length; i++) {
     const word = wordsList[i];
-    console.log(i, word);
     const wordNode = createWordNode(word, i);
     wordNode.id = `word-${i}`;
-    wordsPre.appendChild(wordNode);
     const space = document.createElement("span");
     space.innerText = " ";
+    wordsPre.appendChild(wordNode);
     wordsPre.appendChild(space);
   }
 }
@@ -34,9 +33,8 @@ function createWords() {
 function createWordNode(word, wordIdx) {
   const wordNode = document.createElement("span");
   for (let i = 0; i < word.length; i++) {
-    const letter = word[i];
     const letterNode = document.createElement("span");
-    letterNode.innerText = letter;
+    letterNode.innerText = word[i];
     letterNode.id = `word-${wordIdx}-letter-${i}`;
     wordNode.appendChild(letterNode);
   }
@@ -44,41 +42,52 @@ function createWordNode(word, wordIdx) {
 }
 
 function start(event) {
-  //start timer
   let currentWord = wordsList[activeWordIndex];
   let currentInput = inputArea.value;
   let inputLength = currentInput.length;
+
   if (event.code === "Enter") return;
+
   if (event.code === "Space") {
-    if (inputLength == 0) {
-      event.preventDefault();
-      return;
-    } else {
-      if (activeLetterIndex < currentWord.length) {
-        handleIncompleteWord(currentWord);
-      }
-      inputHistory.push(inputArea.value);
-      event.preventDefault();
-      inputArea.value = "";
-      activeWordIndex++;
-      activeLetterIndex = 0;
-
-      if (checkShift()) {
-        shift();
-      }
-      updateCursorLocation();
-
-      return;
-    }
+    handleSpace(inputLength, currentWord, event);
+    return;
   }
-  if (activeWordIndex == 0 && activeLetterIndex == 0) startTimer(DURATION);
+
+  handleTypedLetter(currentWord, event.key);
+  return;
+}
+
+function handleSpace(inputLength, currentWord, event) {
+  if (inputLength == 0) {
+    event.preventDefault();
+    return;
+  } else {
+    if (activeLetterIndex < currentWord.length) {
+      handleIncompleteWord(currentWord);
+    }
+    inputHistory.push(inputArea.value);
+    event.preventDefault();
+    inputArea.value = "";
+    activeWordIndex++;
+    activeLetterIndex = 0;
+
+    if (shouldShift()) {
+      shift();
+    }
+    updateCursorLocation();
+    return;
+  }
+}
+
+function handleTypedLetter(currentWord, key) {
+  if (isNewTest()) startTimer(DURATION);
 
   const currentLetter = document.getElementById(
     `word-${activeWordIndex}-letter-${activeLetterIndex}`
   );
 
   if (activeLetterIndex < currentWord.length) {
-    if (currentWord[activeLetterIndex] === event.key) {
+    if (currentWord[activeLetterIndex] === key) {
       currentLetter.className = "correct";
       correctChars++;
     } else {
@@ -86,12 +95,12 @@ function start(event) {
       incorrectChars++;
     }
   } else {
-    console.log("extra");
+    // extra letters typed
     const currentWordRef = document.getElementById(`word-${activeWordIndex}`);
     const newLetter = document.createElement("span");
     newLetter.id = `word-${activeWordIndex}-letter-${activeLetterIndex}`;
     newLetter.className = "incorrect";
-    newLetter.innerText = event.key;
+    newLetter.innerText = key;
     currentWordRef.appendChild(newLetter);
   }
   activeLetterIndex++;
@@ -110,8 +119,8 @@ function handleDelete(event) {
         .getElementById(`word-${activeWordIndex}-letter-${activeLetterIndex}`)
         .remove();
     }
+    updateCursorLocation();
   }
-  updateCursorLocation();
 }
 
 function handleIncompleteWord(currentWord) {
@@ -122,7 +131,7 @@ function handleIncompleteWord(currentWord) {
   }
 }
 
-function checkShift() {
+function shouldShift() {
   const wordOffset = document.getElementById(`word-${activeWordIndex}`)
     .offsetTop;
   const fontSize = $("#words-pre").css("font-size");
@@ -156,6 +165,7 @@ function reset(e) {
   activeLetterIndex = 0;
   shiftIndex = 0;
   updateCursorLocation();
+  stopTimer();
   inputArea.focus();
 }
 
@@ -169,7 +179,7 @@ function updateCursorLocation() {
     node = document.getElementById(
       `word-${activeWordIndex}-letter-${activeLetterIndex - 1}`
     );
-    newLeft = node.offsetLeft + node.offsetWidth;
+    newLeft = node.offsetLeft + node.offsetWidth - 1;
     newTop = node.offsetTop;
   } else {
     newLeft = node.offsetLeft - 1;
@@ -184,29 +194,53 @@ function updateCursorLocation() {
   );
 }
 
-createWords();
-updateCursorLocation();
+function isNewTest() {
+  return activeWordIndex == 0 && activeLetterIndex == 0;
+}
 
-inputArea.addEventListener("keypress", start, false);
-inputArea.addEventListener("keydown", handleDelete, false);
-resetBtn.addEventListener("click", reset, false);
-words.addEventListener(
-  "click",
-  () => {
-    inputArea.focus();
-  },
-  false
-);
+function initialize() {
+  createWords();
+  updateCursorLocation();
+  hideCursor();
+  inputArea.addEventListener("keypress", start, false);
+  inputArea.addEventListener("keydown", handleDelete, false);
+  resetBtn.addEventListener("click", reset, false);
+  words.addEventListener(
+    "click",
+    () => {
+      inputArea.focus();
+    },
+    false
+  );
+}
+
+function showCursor() {
+  $("#cursor").show();
+}
+
+function hideCursor() {
+  $("#cursor").hide();
+}
+
+//////////////////////////////////////////////////////////////////////////
+// Initialization (called on start)                                     //
+//////////////////////////////////////////////////////////////////////////
+
+initialize();
+
+//////////////////////////////////////////////////////////////////////////
+// misc handlers                                                        //
+//////////////////////////////////////////////////////////////////////////
 
 $("#input-area")
   .focusin(function () {
-    $("#cursor").show();
+    showCursor();
   })
   .focusout(function () {
-    $("#cursor").hide();
+    hideCursor();
   });
 
-// necessary for safari tabbing to work (keycode 9 is tab)
+// necessary for safari tabbing to work (keycode 9 = tab)
 // whenever tab is pressed while input-area is in focus, focus reset button
 $("#input-area").on("keydown", function (e) {
   if (e.keyCode == 9) {
