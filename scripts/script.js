@@ -3,6 +3,7 @@ const inputArea = document.getElementById("input-area");
 const words = document.getElementById("words");
 const wordsPre = document.getElementById("words-pre");
 const resetBtn = document.getElementById("reset-btn");
+const cursor = document.getElementById("cursor");
 const preOffset = wordsPre.offsetTop;
 
 const sampleText =
@@ -61,6 +62,7 @@ function start(event) {
       if (checkShift()) {
         shift();
       }
+      updateCursorLocation();
 
       return;
     }
@@ -86,6 +88,7 @@ function start(event) {
     currentWordRef.appendChild(newLetter);
   }
   activeLetterIndex++;
+  updateCursorLocation();
 }
 
 function handleDelete(event) {
@@ -101,6 +104,7 @@ function handleDelete(event) {
         .remove();
     }
   }
+  updateCursorLocation();
 }
 
 function handleIncompleteWord(currentWord) {
@@ -143,10 +147,40 @@ function reset(e) {
   activeWordIndex = 0;
   activeLetterIndex = 0;
   shiftIndex = 0;
+  updateCursorLocation();
   inputArea.focus();
 }
 
+function updateCursorLocation() {
+  let node = document.getElementById(
+    `word-${activeWordIndex}-letter-${activeLetterIndex}`
+  );
+  let newLeft;
+  let newTop;
+  if (!node) {
+    node = document.getElementById(
+      `word-${activeWordIndex}-letter-${activeLetterIndex - 1}`
+    );
+    newLeft = node.offsetLeft + node.offsetWidth;
+    newTop = node.offsetTop;
+  } else {
+    console.log(node, activeWordIndex, activeLetterIndex);
+    console.log(node.offsetLeft, node.offsetTop);
+    newLeft = node.offsetLeft;
+    newTop = node.offsetTop;
+  }
+  $("#cursor").stop(true, true).animate(
+    {
+      top: newTop,
+      left: newLeft,
+    },
+    50
+  );
+}
+
 createWords();
+updateCursorLocation();
+
 inputArea.addEventListener("keypress", start, false);
 inputArea.addEventListener("keydown", handleDelete, false);
 resetBtn.addEventListener("click", reset, false);
