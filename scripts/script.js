@@ -1,14 +1,24 @@
+//////////////////////////////////////////////////////////////////////////
+// DOM references                                                       //
+//////////////////////////////////////////////////////////////////////////
 const inputWrapper = document.getElementById("input-wrapper");
 const inputArea = document.getElementById("input-area");
 const words = document.getElementById("words");
 const wordsPre = document.getElementById("words-pre");
 const resetBtn = document.getElementById("reset-btn");
 const cursor = document.getElementById("cursor");
-const preOffset = wordsPre.offsetTop;
-const DURATION = 60;
 
+//////////////////////////////////////////////////////////////////////////
+// Constants                                                            //
+//////////////////////////////////////////////////////////////////////////
+const preOffset = wordsPre.offsetTop;
+const DURATION = 5;
 const sampleText =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
+
+//////////////////////////////////////////////////////////////////////////
+// Test state                                                           //
+//////////////////////////////////////////////////////////////////////////
 const wordsList = sampleText.split(" ");
 let activeWordIndex = 0;
 let activeLetterIndex = 0;
@@ -17,6 +27,10 @@ let shiftIndex = 0;
 let current;
 let correctChars = 0;
 let incorrectChars = 0;
+
+//////////////////////////////////////////////////////////////////////////
+// Functions                                                            //
+//////////////////////////////////////////////////////////////////////////
 
 function createWords() {
   for (let i = 0; i < wordsList.length; i++) {
@@ -89,10 +103,10 @@ function handleTypedLetter(currentWord, key) {
   if (activeLetterIndex < currentWord.length) {
     if (currentWord[activeLetterIndex] === key) {
       currentLetter.className = "correct";
-      correctChars++;
+      scoreCorrectTyped();
     } else {
       currentLetter.className = "incorrect";
-      incorrectChars++;
+      scoreIncorrectTyped();
     }
   } else {
     // extra letters typed
@@ -102,6 +116,7 @@ function handleTypedLetter(currentWord, key) {
     newLetter.className = "incorrect";
     newLetter.innerText = key;
     currentWordRef.appendChild(newLetter);
+    scoreIncorrectTyped();
   }
   activeLetterIndex++;
   updateCursorLocation();
@@ -111,13 +126,17 @@ function handleDelete(event) {
   if (event.key === "Backspace") {
     if (activeLetterIndex > 0) activeLetterIndex--;
     if (activeLetterIndex < wordsList[activeWordIndex].length) {
-      document.getElementById(
+      const prevLetter = document.getElementById(
         `word-${activeWordIndex}-letter-${activeLetterIndex}`
-      ).className = "";
+      );
+      if (prevLetter.className === "correct") scoreCorrectDeleted();
+      else if (prevLetter.className === "incorrect") scoreIncorrectDeleted();
+      prevLetter.className = "";
     } else {
       document
         .getElementById(`word-${activeWordIndex}-letter-${activeLetterIndex}`)
         .remove();
+      scoreIncorrectDeleted();
     }
     updateCursorLocation();
   }
@@ -201,7 +220,7 @@ function isNewTest() {
 function initialize() {
   createWords();
   updateCursorLocation();
-  hideCursor();
+  inputArea.focus();
   inputArea.addEventListener("keypress", start, false);
   inputArea.addEventListener("keydown", handleDelete, false);
   resetBtn.addEventListener("click", reset, false);

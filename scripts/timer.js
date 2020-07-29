@@ -15,4 +15,6 @@ function startTimer(duration) {
 
 function stopTimer() {
   clearInterval(interval);
+  printScores();
+  resetScores();
 }
