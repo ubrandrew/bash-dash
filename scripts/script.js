@@ -5,6 +5,7 @@ const wordsPre = document.getElementById("words-pre");
 const resetBtn = document.getElementById("reset-btn");
 const cursor = document.getElementById("cursor");
 const preOffset = wordsPre.offsetTop;
+const DURATION = 60;
 
 const sampleText =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
@@ -13,6 +14,9 @@ let activeWordIndex = 0;
 let activeLetterIndex = 0;
 let inputHistory = [];
 let shiftIndex = 0;
+let current;
+let correctChars = 0;
+let incorrectChars = 0;
 
 function createWords() {
   for (let i = 0; i < wordsList.length; i++) {
@@ -67,6 +71,7 @@ function start(event) {
       return;
     }
   }
+  if (activeWordIndex == 0 && activeLetterIndex == 0) startTimer(DURATION);
 
   const currentLetter = document.getElementById(
     `word-${activeWordIndex}-letter-${activeLetterIndex}`
@@ -75,8 +80,10 @@ function start(event) {
   if (activeLetterIndex < currentWord.length) {
     if (currentWord[activeLetterIndex] === event.key) {
       currentLetter.className = "correct";
+      correctChars++;
     } else {
       currentLetter.className = "incorrect";
+      incorrectChars++;
     }
   } else {
     console.log("extra");
@@ -120,6 +127,7 @@ function checkShift() {
     .offsetTop;
   const fontSize = $("#words-pre").css("font-size");
   const lineHeight = parseFloat(fontSize.replace("px", "")) * 1.5;
+  console.log(wordOffset, fontSize, lineHeight);
   if (wordOffset - preOffset >= 2 * lineHeight) {
     console.log("SHIFT!");
     return true;
@@ -164,9 +172,7 @@ function updateCursorLocation() {
     newLeft = node.offsetLeft + node.offsetWidth;
     newTop = node.offsetTop;
   } else {
-    console.log(node, activeWordIndex, activeLetterIndex);
-    console.log(node.offsetLeft, node.offsetTop);
-    newLeft = node.offsetLeft;
+    newLeft = node.offsetLeft - 1;
     newTop = node.offsetTop;
   }
   $("#cursor").stop(true, true).animate(
@@ -174,7 +180,7 @@ function updateCursorLocation() {
       top: newTop,
       left: newLeft,
     },
-    50
+    100
   );
 }
 
