@@ -82,7 +82,7 @@ function handleSpace(inputLength, currentWord, event) {
     return;
   } else {
     if (activeLetterIndex < currentWord.length) {
-      handleIncompleteWord();
+      //   handleIncompleteWord();
     } else {
       // if word is completed or extra, still count space as correct
       scoreCorrectTyped(); // count spaces as correct key
@@ -121,7 +121,7 @@ function handleTypedLetter(currentWord, key) {
     const currentWordRef = document.getElementById(`word-${activeWordIndex}`);
     const newLetter = document.createElement("span");
     newLetter.id = `word-${activeWordIndex}-letter-${activeLetterIndex}`;
-    newLetter.className = "incorrect";
+    newLetter.className = "incorrect-special";
     newLetter.innerText = key;
     currentWordRef.appendChild(newLetter);
     scoreIncorrectTyped();
@@ -139,7 +139,7 @@ function handleDelete(event) {
       activeWordIndex--;
       activeLetterIndex = prevInput.length;
       inputArea.value = inputHistory.pop();
-      undoHandleIncompleteWord();
+      //   undoHandleIncompleteWord();
       updateCursorLocation();
       scoreCorrectDeleted();
       console.log(inputArea.value, activeWordIndex, activeLetterIndex);
@@ -171,7 +171,7 @@ function handleDelete(event) {
 function handleIncompleteWord() {
   for (let i = activeLetterIndex; i < wordsList[activeWordIndex].length; i++) {
     document.getElementById(`word-${activeWordIndex}-letter-${i}`).className =
-      "incorrect";
+      "incorrect-special";
   }
 }
 
