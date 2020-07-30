@@ -48,6 +48,10 @@ html,
   color: lightcoral;
 }
 
+.incorrect-word {
+  text-decoration: underline solid coral;
+}
+
 .container {
   width: 100%;
 }

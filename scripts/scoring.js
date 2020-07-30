@@ -6,26 +6,26 @@ let netTotal = 0;
 let total = 0;
 let wpmChars = 0;
 
-function scoreCorrectTyped() {
+function scoreCorrectLetterTyped() {
   netCorrect++;
   correct++;
   netTotal++;
   total++;
 }
 
-function scoreIncorrectTyped() {
+function scoreIncorrectLetterTyped() {
   netIncorrect++;
   incorrect++;
   netTotal++;
   total++;
 }
 
-function scoreIncorrectDeleted() {
+function scoreIncorrectLetterDeleted() {
   incorrect--;
   total--;
 }
 
-function scoreCorrectDeleted() {
+function scoreCorrectLetterDeleted() {
   correct--;
   total--;
 }
@@ -61,7 +61,7 @@ function calculateNetWPM() {
 }
 
 function calculateRawWPM() {
-  return Math.round((netTotal / 5 / DURATION) * 60);
+  return Math.round((total / 5 / DURATION) * 60);
 }
 
 function calculateAccuracy() {
@@ -70,9 +70,14 @@ function calculateAccuracy() {
 
 function calculateLiveWPM() {
   if (elapsedTime === 0) return 0;
+  console.log(elapsedTime / 1000);
   return Math.round((wpmChars / 5 / (elapsedTime / 1000)) * 60);
 }
 
+function calculateLiveAcc() {
+  if (elapsedTime === 0) return 100;
+  return calculateAccuracy();
+}
 function printScores() {
   console.log(calculateNetWPM());
   console.log(calculateRawWPM());

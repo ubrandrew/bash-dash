@@ -11,13 +11,15 @@ const results = document.getElementById("results");
 const netWPM = document.getElementById("net-wpm");
 const rawWPM = document.getElementById("raw-wpm");
 const acc = document.getElementById("accuracy");
+const liveAcc = document.getElementById("live-acc");
+const liveWPM = document.getElementById("live-wpm");
 
 //////////////////////////////////////////////////////////////////////////
 // Constants                                                            //
 //////////////////////////////////////////////////////////////////////////
 const LINE_HEIGHT = 1.5;
 const LINE_TO_SHIFT = 2;
-const DURATION = 2;
+const DURATION = 3;
 const preOffset = wordsPre.offsetTop;
 const sampleText =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
@@ -89,10 +91,15 @@ function handleSpace(inputLength, currentWord, event) {
       //   handleIncompleteWord();
     } else {
       // if word is completed or extra, still count space as correct
-      scoreCorrectTyped(); // count spaces as correct key
+      scoreCorrectLetterTyped(); // count spaces as correct key
     }
     inputHistory.push(inputArea.value);
-    if (inputArea.value === currentWord) scoreWord(currentWord);
+    if (inputArea.value === currentWord) {
+      scoreWord(currentWord);
+    } else {
+      document.getElementById(`word-${activeWordIndex}`).className =
+        "incorrect-word";
+    }
     inputArea.value = "";
     activeWordIndex++;
     activeLetterIndex = 0;
@@ -116,10 +123,10 @@ function handleTypedLetter(currentWord, key) {
   if (activeLetterIndex < currentWord.length) {
     if (currentWord[activeLetterIndex] === key) {
       currentLetter.className = "correct";
-      scoreCorrectTyped();
+      scoreCorrectLetterTyped();
     } else {
       currentLetter.className = "incorrect";
-      scoreIncorrectTyped();
+      scoreIncorrectLetterTyped();
     }
   } else {
     // extra letters typed
@@ -129,7 +136,7 @@ function handleTypedLetter(currentWord, key) {
     newLetter.className = "incorrect-special";
     newLetter.innerText = key;
     currentWordRef.appendChild(newLetter);
-    scoreIncorrectTyped();
+    scoreIncorrectLetterTyped();
   }
   activeLetterIndex++;
   updateCursorLocation();
@@ -146,8 +153,11 @@ function handleDelete(event) {
       inputArea.value = inputHistory.pop();
       //   undoHandleIncompleteWord();
       updateCursorLocation();
-      scoreCorrectDeleted();
-      console.log(inputArea.value, activeWordIndex, activeLetterIndex);
+
+      // lengths of input and words are checked because words that are incomplete do not count spaces as correct
+      // we need to see if the input is complete (or in excess) to see if the space was counted or not
+      if (prevInput.length >= prevWord.length) scoreCorrectLetterDeleted();
+      document.getElementById(`word-${activeWordIndex}`).className = "";
       event.preventDefault();
       return;
     }
@@ -160,14 +170,15 @@ function handleDelete(event) {
     const prevLetter = document.getElementById(
       `word-${activeWordIndex}-letter-${activeLetterIndex}`
     );
-    if (prevLetter.className === "correct") scoreCorrectDeleted();
-    else if (prevLetter.className === "incorrect") scoreIncorrectDeleted();
+    if (prevLetter.className === "correct") scoreCorrectLetterDeleted();
+    else if (prevLetter.className === "incorrect")
+      scoreIncorrectLetterDeleted();
     prevLetter.className = "";
   } else {
     document
       .getElementById(`word-${activeWordIndex}-letter-${activeLetterIndex}`)
       .remove();
-    scoreIncorrectDeleted();
+    scoreIncorrectLetterDeleted();
   }
   updateCursorLocation();
 }
@@ -251,6 +262,7 @@ function reset(e) {
   activeLetterIndex = 0;
   shiftIndex = 0;
   resetScores();
+  resetLiveStats();
   refreshTest();
   updateCursorLocation();
   inputArea.focus();
@@ -305,8 +317,18 @@ function hideCursor() {
 function showResults() {
   netWPM.innerText = calculateNetWPM();
   rawWPM.innerText = calculateRawWPM();
-  acc.innerText = Math.round(calculateAccuracy());
+  acc.innerText = `${Math.round(calculateAccuracy())}%`;
   $("#results").show();
+}
+
+function updateLiveStats() {
+  liveWPM.innerText = calculateLiveWPM();
+  liveAcc.innerText = `${Math.round(calculateLiveAcc())}%`;
+}
+
+function resetLiveStats() {
+  liveWPM.innerText = "--";
+  liveAcc.innerText = "--";
 }
 
 function hideResults() {
