@@ -68,6 +68,11 @@ function calculateAccuracy() {
   return 100 * (netCorrect / netTotal);
 }
 
+function calculateLiveWPM() {
+  if (elapsedTime === 0) return 0;
+  return Math.round((wpmChars / 5 / (elapsedTime / 1000)) * 60);
+}
+
 function printScores() {
   console.log(calculateNetWPM());
   console.log(calculateRawWPM());

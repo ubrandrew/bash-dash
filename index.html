@@ -13,6 +13,10 @@
     <script src="scripts/timer.js" defer></script>
     <script src="scripts/scoring.js" defer></script>
     <script src="scripts/script.js" defer></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
+      rel="stylesheet"
+    />
   </head>
   <body>
     <div class="main-content">
@@ -23,6 +27,20 @@
         </div>
         <div id="input-wrapper">
           <input tabindex="0" id="input-area" />
+        </div>
+      </div>
+      <div id="results">
+        <div class="stat-container">
+          <div class="label">WPM</div>
+          <div class="stat" id="net-wpm"></div>
+        </div>
+        <div class="stat-container">
+          <div class="label">Raw WPM</div>
+          <div class="stat" id="raw-wpm"></div>
+        </div>
+        <div class="stat-container">
+          <div class="label">Accuracy</div>
+          <div class="stat" id="accuracy"></div>
         </div>
       </div>
       <div>

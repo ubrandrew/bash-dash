@@ -5,8 +5,9 @@ let running = false;
 function startTimer(duration) {
   running = true;
   startTime = Date.now();
-  interval = setInterval(tick, 100);
+  interval = setInterval(tick, 1000);
   function tick() {
+    console.log(calculateLiveWPM());
     elapsedTime = Date.now() - startTime;
     if (elapsedTime >= duration * 1000) stopTimer();
   }

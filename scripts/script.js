@@ -7,13 +7,17 @@ const words = document.getElementById("words");
 const wordsPre = document.getElementById("words-pre");
 const resetBtn = document.getElementById("reset-btn");
 const cursor = document.getElementById("cursor");
+const results = document.getElementById("results");
+const netWPM = document.getElementById("net-wpm");
+const rawWPM = document.getElementById("raw-wpm");
+const acc = document.getElementById("accuracy");
 
 //////////////////////////////////////////////////////////////////////////
 // Constants                                                            //
 //////////////////////////////////////////////////////////////////////////
 const LINE_HEIGHT = 1.5;
 const LINE_TO_SHIFT = 2;
-const DURATION = 10;
+const DURATION = 2;
 const preOffset = wordsPre.offsetTop;
 const sampleText =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
@@ -254,12 +258,14 @@ function reset(e) {
 }
 
 function stopTest() {
-  wordsPre.style["display"] = "none";
+  words.style["display"] = "none";
+  showResults();
   inputArea.disabled = true;
 }
 
 function refreshTest() {
-  wordsPre.style["display"] = "";
+  words.style["display"] = "";
+  hideResults();
   inputArea.disabled = false;
   console.log(inputArea.disabled);
   cursor.className = "";
@@ -294,6 +300,17 @@ function showCursor() {
 
 function hideCursor() {
   $("#cursor").hide();
+}
+
+function showResults() {
+  netWPM.innerText = calculateNetWPM();
+  rawWPM.innerText = calculateRawWPM();
+  acc.innerText = Math.round(calculateAccuracy());
+  $("#results").show();
+}
+
+function hideResults() {
+  $("#results").hide();
 }
 
 //////////////////////////////////////////////////////////////////////////

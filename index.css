@@ -6,6 +6,10 @@ html,
   width: 100%;
 }
 
+* {
+  font-family: "Roboto mono", monospace;
+}
+
 .main-content {
   display: flex;
   justify-content: center;
@@ -27,9 +31,9 @@ html,
   line-height: 1.5em;
   white-space: pre-wrap;
   padding: 10px 1px;
-  font-size: 1.25em;
+  font-size: 1em;
   min-width: 100%;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.01em;
 }
 
 .correct {
@@ -84,4 +88,29 @@ html,
   100% {
     opacity: 1;
   }
+}
+
+#results {
+  display: none;
+  margin: 100px;
+  width: 50%;
+}
+
+.label {
+  width: 50%;
+  font-size: 2em;
+  text-align: right;
+  float: left;
+  padding-right: 1em;
+}
+
+.stat {
+  width: 50%;
+  font-size: 2.5em;
+  color: indigo;
+  float: right;
+}
+.stat-container {
+  display: flex;
+  align-items: center;
 }
