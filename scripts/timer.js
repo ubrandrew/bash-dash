@@ -14,6 +14,7 @@ function startTimer(duration) {
 
 function stopTimer() {
   clearInterval(interval);
+  scoreLastWord(inputArea.value, wordsList[activeWordIndex]);
   running = false;
   stopTest();
   printScores();

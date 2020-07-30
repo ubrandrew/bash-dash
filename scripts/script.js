@@ -13,7 +13,7 @@ const cursor = document.getElementById("cursor");
 //////////////////////////////////////////////////////////////////////////
 const LINE_HEIGHT = 1.5;
 const LINE_TO_SHIFT = 2;
-const DURATION = 20;
+const DURATION = 10;
 const preOffset = wordsPre.offsetTop;
 const sampleText =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
@@ -88,6 +88,7 @@ function handleSpace(inputLength, currentWord, event) {
       scoreCorrectTyped(); // count spaces as correct key
     }
     inputHistory.push(inputArea.value);
+    if (inputArea.value === currentWord) scoreWord(currentWord);
     inputArea.value = "";
     activeWordIndex++;
     activeLetterIndex = 0;
