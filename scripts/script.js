@@ -65,7 +65,7 @@ function start(event) {
 
   if (event.code === "Enter") return;
 
-  cursor.className = "pause";
+  cursor.className = "";
   if (event.code === "Space") {
     handleSpace(inputLength, currentWord, event);
     return;
@@ -249,7 +249,7 @@ function reset(e) {
   refreshTest();
   updateCursorLocation();
   inputArea.focus();
-  cursor.className = "";
+  cursor.className = "run-animation";
 }
 
 function stopTest() {
@@ -284,6 +284,7 @@ function initialize() {
     },
     false
   );
+  cursor.className = "run-animation";
 }
 
 function showCursor() {

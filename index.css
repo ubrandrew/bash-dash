@@ -65,10 +65,13 @@ html,
   width: 2px;
   height: 1.25em;
   background-color: purple;
+  opacity: 1;
+}
+
+.run-animation {
   animation-name: blink;
   animation-duration: 1000ms;
   animation-iteration-count: infinite;
-  opacity: 1;
 }
 
 @keyframes blink {
@@ -81,12 +84,4 @@ html,
   100% {
     opacity: 1;
   }
-}
-
-.pause {
-  -webkit-animation-play-state: paused !important;
-  -moz-animation-play-state: paused !important;
-  -o-animation-play-state: paused !important;
-  animation-play-state: paused !important;
-  opacity: 1 !important;
 }
