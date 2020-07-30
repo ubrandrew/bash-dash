@@ -14,8 +14,9 @@ html,
 }
 
 #words {
-  max-width: 70%;
+  max-width: 100%;
   min-width: 70%;
+  width: 70%;
   margin: 0 auto;
   overflow: hidden;
   position: relative;
@@ -76,4 +77,12 @@ html,
   100% {
     opacity: 1;
   }
+}
+
+.pause {
+  -webkit-animation-play-state: paused !important;
+  -moz-animation-play-state: paused !important;
+  -o-animation-play-state: paused !important;
+  animation-play-state: paused !important;
+  opacity: 1 !important;
 }

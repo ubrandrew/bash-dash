@@ -11,8 +11,10 @@ const cursor = document.getElementById("cursor");
 //////////////////////////////////////////////////////////////////////////
 // Constants                                                            //
 //////////////////////////////////////////////////////////////////////////
+const LINE_HEIGHT = 1.5;
+const LINE_TO_SHIFT = 2;
+const DURATION = 20;
 const preOffset = wordsPre.offsetTop;
-const DURATION = 5;
 const sampleText =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
 
@@ -38,6 +40,7 @@ function createWords() {
     const wordNode = createWordNode(word, i);
     wordNode.id = `word-${i}`;
     const space = document.createElement("span");
+    space.id = `space-${i}`;
     space.innerText = " ";
     wordsPre.appendChild(wordNode);
     wordsPre.appendChild(space);
@@ -62,6 +65,7 @@ function start(event) {
 
   if (event.code === "Enter") return;
 
+  cursor.className = "pause";
   if (event.code === "Space") {
     handleSpace(inputLength, currentWord, event);
     return;
@@ -73,17 +77,21 @@ function start(event) {
 
 function handleSpace(inputLength, currentWord, event) {
   if (inputLength == 0) {
+    console.log(inputLength);
     event.preventDefault();
     return;
   } else {
     if (activeLetterIndex < currentWord.length) {
-      handleIncompleteWord(currentWord);
+      handleIncompleteWord();
+    } else {
+      // if word is completed or extra, still count space as correct
+      scoreCorrectTyped(); // count spaces as correct key
     }
     inputHistory.push(inputArea.value);
-    event.preventDefault();
     inputArea.value = "";
     activeWordIndex++;
     activeLetterIndex = 0;
+    event.preventDefault();
 
     if (shouldShift()) {
       shift();
@@ -123,40 +131,65 @@ function handleTypedLetter(currentWord, key) {
 }
 
 function handleDelete(event) {
-  if (event.key === "Backspace") {
-    if (activeLetterIndex > 0) activeLetterIndex--;
-    if (activeLetterIndex < wordsList[activeWordIndex].length) {
-      const prevLetter = document.getElementById(
-        `word-${activeWordIndex}-letter-${activeLetterIndex}`
-      );
-      if (prevLetter.className === "correct") scoreCorrectDeleted();
-      else if (prevLetter.className === "incorrect") scoreIncorrectDeleted();
-      prevLetter.className = "";
-    } else {
-      document
-        .getElementById(`word-${activeWordIndex}-letter-${activeLetterIndex}`)
-        .remove();
-      scoreIncorrectDeleted();
+  // checks if cursor to move to prev word
+  if (activeLetterIndex === 0 && activeWordIndex > 0) {
+    const prevWord = wordsList[activeWordIndex - 1];
+    const prevInput = inputHistory[activeWordIndex - 1];
+    if (prevInput !== prevWord) {
+      activeWordIndex--;
+      activeLetterIndex = prevInput.length;
+      inputArea.value = inputHistory.pop();
+      undoHandleIncompleteWord();
+      updateCursorLocation();
+      scoreCorrectDeleted();
+      console.log(inputArea.value, activeWordIndex, activeLetterIndex);
+      event.preventDefault();
+      return;
     }
-    updateCursorLocation();
+    // hcekc if prev word is correct
+    // if not correct, set as active word
+  } else if (activeLetterIndex > 0) {
+    activeLetterIndex--;
   }
+  if (activeLetterIndex < wordsList[activeWordIndex].length) {
+    const prevLetter = document.getElementById(
+      `word-${activeWordIndex}-letter-${activeLetterIndex}`
+    );
+    if (prevLetter.className === "correct") scoreCorrectDeleted();
+    else if (prevLetter.className === "incorrect") scoreIncorrectDeleted();
+    prevLetter.className = "";
+  } else {
+    document
+      .getElementById(`word-${activeWordIndex}-letter-${activeLetterIndex}`)
+      .remove();
+    scoreIncorrectDeleted();
+  }
+  updateCursorLocation();
 }
 
-function handleIncompleteWord(currentWord) {
-  console.log(activeLetterIndex, currentWord.length);
-  for (let i = activeLetterIndex; i < currentWord.length; i++) {
+// marks incompletely typed words as incorrect (should make a subset for extra and untryped words)
+function handleIncompleteWord() {
+  for (let i = activeLetterIndex; i < wordsList[activeWordIndex].length; i++) {
     document.getElementById(`word-${activeWordIndex}-letter-${i}`).className =
       "incorrect";
   }
 }
 
+function undoHandleIncompleteWord() {
+  for (let i = activeLetterIndex; i < wordsList[activeWordIndex].length; i++) {
+    document.getElementById(`word-${activeWordIndex}-letter-${i}`).className =
+      "";
+  }
+}
+
+// checks if words list should shift
+// 1.5 comes form line height
 function shouldShift() {
   const wordOffset = document.getElementById(`word-${activeWordIndex}`)
     .offsetTop;
   const fontSize = $("#words-pre").css("font-size");
-  const lineHeight = parseFloat(fontSize.replace("px", "")) * 1.5;
-  console.log(wordOffset, fontSize, lineHeight);
-  if (wordOffset - preOffset >= 2 * lineHeight) {
+  const lineHeight = parseFloat(fontSize.replace("px", "")) * LINE_HEIGHT;
+  if (wordOffset - preOffset >= LINE_TO_SHIFT * lineHeight) {
     console.log("SHIFT!");
     return true;
   } else {
@@ -164,6 +197,7 @@ function shouldShift() {
   }
 }
 
+// seems to work, just review it tommorrow
 function shift() {
   let children = wordsPre.children;
   console.log(children, activeWordIndex);
@@ -173,21 +207,6 @@ function shift() {
   shiftIndex = 2 * activeWordIndex;
 }
 
-function reset(e) {
-  //reset timer
-  console.log(inputHistory);
-  wordsPre.innerHTML = "";
-  inputArea.value = "";
-  createWords();
-  inputHistory = [];
-  activeWordIndex = 0;
-  activeLetterIndex = 0;
-  shiftIndex = 0;
-  updateCursorLocation();
-  stopTimer();
-  inputArea.focus();
-}
-
 function updateCursorLocation() {
   let node = document.getElementById(
     `word-${activeWordIndex}-letter-${activeLetterIndex}`
@@ -195,10 +214,8 @@ function updateCursorLocation() {
   let newLeft;
   let newTop;
   if (!node) {
-    node = document.getElementById(
-      `word-${activeWordIndex}-letter-${activeLetterIndex - 1}`
-    );
-    newLeft = node.offsetLeft + node.offsetWidth - 1;
+    node = document.getElementById(`space-${activeWordIndex}`);
+    newLeft = node.offsetLeft - 1;
     newTop = node.offsetTop;
   } else {
     newLeft = node.offsetLeft - 1;
@@ -214,7 +231,43 @@ function updateCursorLocation() {
 }
 
 function isNewTest() {
-  return activeWordIndex == 0 && activeLetterIndex == 0;
+  return activeWordIndex == 0 && activeLetterIndex == 0 && !running;
+}
+
+function reset(e) {
+  //reset timer
+  stopTimer();
+  console.log(inputHistory);
+  wordsPre.innerHTML = "";
+  inputArea.value = "";
+  createWords();
+  inputHistory = [];
+  activeWordIndex = 0;
+  activeLetterIndex = 0;
+  shiftIndex = 0;
+  resetScores();
+  refreshTest();
+  updateCursorLocation();
+  inputArea.focus();
+  cursor.className = "";
+}
+
+function stopTest() {
+  wordsPre.style["display"] = "none";
+  inputArea.disabled = true;
+}
+
+function refreshTest() {
+  wordsPre.style["display"] = "";
+  inputArea.disabled = false;
+  console.log(inputArea.disabled);
+  cursor.className = "";
+}
+
+function handleKeyDown(event) {
+  if (event.key === "Backspace") {
+    handleDelete(event);
+  }
 }
 
 function initialize() {
@@ -222,7 +275,7 @@ function initialize() {
   updateCursorLocation();
   inputArea.focus();
   inputArea.addEventListener("keypress", start, false);
-  inputArea.addEventListener("keydown", handleDelete, false);
+  inputArea.addEventListener("keydown", handleKeyDown, false);
   resetBtn.addEventListener("click", reset, false);
   words.addEventListener(
     "click",
