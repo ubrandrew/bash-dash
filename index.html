@@ -12,6 +12,8 @@
     <script src="scripts/test.js" defer></script>
     <script src="scripts/timer.js" defer></script>
     <script src="scripts/scoring.js" defer></script>
+    <script src="scripts/textGenerator.js" defer></script>
+    <script src="scripts/settings.js" defer></script>
     <script src="scripts/script.js" defer></script>
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
@@ -22,9 +24,18 @@
     <div class="main-content">
       <div class="container">
         <div id="words" class="fade-in">
-          <div id="live-stats">
-            wpm: <span id="live-wpm">--</span> / acc:
-            <span id="live-acc">--</span>
+          <div class="settings-container">
+            <div id="time-select">
+              time(s): <span class="setting-option" id="t-15">15</span> /
+              <span class="setting-option" id="t-30">30</span> /
+              <span class="setting-option" id="t-60">60</span> /
+              <span class="setting-option" id="t-120">120</span> /
+              <span class="setting-option" id="t-custom">custom</span>
+            </div>
+            <div id="live-stats">
+              wpm: <span id="live-wpm">--</span> / acc:
+              <span id="live-acc">--</span>
+            </div>
           </div>
           <div id="cursor"></div>
           <pre id="words-pre"></pre>
@@ -34,7 +45,7 @@
         </div>
       </div>
       <div id="results" class="fade-in">
-        <div class="stat-container">
+        <div class="stat-container main">
           <div class="label">WPM</div>
           <div class="stat" id="net-wpm"></div>
         </div>

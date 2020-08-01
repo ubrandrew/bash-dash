@@ -17,9 +17,8 @@ const liveWPM = document.getElementById("live-wpm");
 //////////////////////////////////////////////////////////////////////////
 // Constants                                                            //
 //////////////////////////////////////////////////////////////////////////
-const LINE_HEIGHT = 1.5;
+const LINE_HEIGHT = 2;
 const LINE_TO_SHIFT = 2;
-const DURATION = 3;
 const preOffset = wordsPre.offsetTop;
 const sampleText =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
@@ -27,7 +26,11 @@ const sampleText =
 //////////////////////////////////////////////////////////////////////////
 // Test state                                                           //
 //////////////////////////////////////////////////////////////////////////
+let DURATION = 10;
+
 const wordsList = sampleText.split(" ");
+// const wordsList = generateText(500);
+
 let activeWordIndex = 0;
 let activeLetterIndex = 0;
 let inputHistory = [];
@@ -35,7 +38,7 @@ let shiftIndex = 0;
 let current;
 let correctChars = 0;
 let incorrectChars = 0;
-
+let lastIndexOnLine = 0;
 //////////////////////////////////////////////////////////////////////////
 // Functions                                                            //
 //////////////////////////////////////////////////////////////////////////
@@ -199,7 +202,6 @@ function undoHandleIncompleteWord() {
 }
 
 // checks if words list should shift
-// 1.5 comes form line height
 function shouldShift() {
   const wordOffset = document.getElementById(`word-${activeWordIndex}`)
     .offsetTop;
@@ -209,6 +211,15 @@ function shouldShift() {
     console.log("SHIFT!");
     return true;
   } else {
+    if (wordOffset - preOffset >= lineHeight) {
+      const prevWordOffset = document.getElementById(
+        `word-${activeWordIndex - 1}`
+      ).offsetTop;
+      if (prevWordOffset != wordOffset) {
+        console.log("prev Line!!");
+        lastIndexOnLine = activeWordIndex;
+      }
+    }
     return false;
   }
 }
@@ -217,10 +228,11 @@ function shouldShift() {
 function shift() {
   let children = wordsPre.children;
   console.log(children, activeWordIndex);
-  for (let i = shiftIndex; i < 2 * activeWordIndex; i++) {
+  for (let i = shiftIndex; i < 2 * lastIndexOnLine; i++) {
     children[0].remove();
   }
-  shiftIndex = 2 * activeWordIndex;
+  shiftIndex = 2 * lastIndexOnLine;
+  lastIndexOnLine = activeWordIndex - 1;
 }
 
 function updateCursorLocation() {

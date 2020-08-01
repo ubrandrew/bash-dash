@@ -18,17 +18,17 @@ html,
 }
 
 #words {
-  max-width: 100%;
-  min-width: 70%;
-  width: 70%;
+  max-width: 850px;
+  min-width: 50%;
+  /* width: 50%; */
   margin: 0 auto;
   overflow: hidden;
   position: relative;
 }
 
 #words-pre {
-  height: 3em;
-  line-height: 1.5em;
+  height: 4em;
+  line-height: 2em;
   white-space: pre-wrap;
   padding: 10px 1px;
   font-size: 1em;
@@ -105,7 +105,6 @@ html,
   font-size: 2em;
   text-align: right;
   float: left;
-  padding-right: 1em;
 }
 
 .stat {
@@ -113,10 +112,14 @@ html,
   font-size: 2.5em;
   color: indigo;
   float: right;
+  padding-left: 50px;
 }
 .stat-container {
   display: flex;
   align-items: center;
+}
+.stat-container.main {
+  font-size: 2em;
 }
 
 .fade-in {
@@ -169,4 +172,28 @@ html,
   100% {
     opacity: 1;
   }
+}
+.settings-container {
+  display: flex;
+  padding-bottom: 0.5em;
+}
+
+#time-select {
+  flex-grow: 1;
+  cursor: default;
+}
+#live-stats {
+  float: right;
+}
+
+#reset-btn {
+  margin-top: 2em;
+}
+
+.setting-option {
+  cursor: pointer;
+}
+
+.setting-option.active {
+  border-bottom: 2px solid gray;
 }

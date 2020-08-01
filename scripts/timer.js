@@ -6,7 +6,7 @@ let running = false;
 function startTimer(duration) {
   running = true;
   startTime = Date.now();
-  interval = setInterval(tick, 1000);
+  interval = setInterval(tick, 100);
   function tick() {
     elapsedTime = Date.now() - startTime;
     updateLiveStats();
