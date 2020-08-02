@@ -18,9 +18,8 @@ html,
 }
 
 #words {
-  max-width: 850px;
   min-width: 50%;
-  /* width: 50%; */
+  width: 850px;
   margin: 0 auto;
   overflow: hidden;
   position: relative;
@@ -29,7 +28,7 @@ html,
 #words-pre {
   height: 4em;
   line-height: 2em;
-  white-space: pre-wrap;
+  white-space: normal;
   padding: 10px 1px;
   font-size: 1em;
   min-width: 100%;

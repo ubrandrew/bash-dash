@@ -11,15 +11,15 @@ t120.addEventListener("click", changeTime, false);
 // tCustom.addEventListener("click", changeTime, false);
 
 const idTimeMap = {
-  "t-15": 15,
-  "t-30": 30,
-  "t-60": 60,
-  "t-120": 120,
+  "t-15": [15, t15],
+  "t-30": [30, t30],
+  "t-60": [60, t60],
+  "t-120": [120, t120],
 };
 
 function changeTime(event) {
   clearAllActiveTimes();
-  DURATION = idTimeMap[event.target.id];
+  DURATION = idTimeMap[event.target.id][0];
   event.target.classList.add("active");
 }
 

@@ -70,7 +70,6 @@ function calculateAccuracy() {
 
 function calculateLiveWPM() {
   if (elapsedTime === 0) return 0;
-  console.log(elapsedTime / 1000);
   return Math.round((wpmChars / 5 / (elapsedTime / 1000)) * 60);
 }
 

@@ -77,11 +77,9 @@ function start(event) {
   cursor.className = "";
   if (event.code === "Space") {
     handleSpace(inputLength, currentWord, event);
-    return;
+  } else {
+    handleTypedLetter(currentWord, event.key);
   }
-
-  handleTypedLetter(currentWord, event.key);
-  return;
 }
 
 function handleSpace(inputLength, currentWord, event) {
@@ -124,6 +122,7 @@ function handleTypedLetter(currentWord, key) {
   );
 
   if (activeLetterIndex < currentWord.length) {
+    console.log(activeLetterIndex, activeWordIndex);
     if (currentWord[activeLetterIndex] === key) {
       currentLetter.className = "correct";
       scoreCorrectLetterTyped();
@@ -227,12 +226,11 @@ function shouldShift() {
 // seems to work, just review it tommorrow
 function shift() {
   let children = wordsPre.children;
-  console.log(children, activeWordIndex);
   for (let i = shiftIndex; i < 2 * lastIndexOnLine; i++) {
     children[0].remove();
   }
   shiftIndex = 2 * lastIndexOnLine;
-  lastIndexOnLine = activeWordIndex - 1;
+  lastIndexOnLine = activeWordIndex;
 }
 
 function updateCursorLocation() {
