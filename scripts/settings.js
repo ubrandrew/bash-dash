@@ -42,3 +42,8 @@ function underlineActiveOption() {
   clearAllActiveTimes();
   idTimeMap[time][1].classList.add("active");
 }
+
+function getDuration() {
+  const time = window.localStorage.getItem("time");
+  return idTimeMap[time][0];
+}

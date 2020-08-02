@@ -26,7 +26,7 @@ const sampleText =
 //////////////////////////////////////////////////////////////////////////
 // Test state                                                           //
 //////////////////////////////////////////////////////////////////////////
-let DURATION = 10;
+let DURATION = getDuration();
 
 const wordsList = sampleText.split(" ");
 // const wordsList = generateText(500);
@@ -84,7 +84,6 @@ function start(event) {
 
 function handleSpace(inputLength, currentWord, event) {
   if (inputLength == 0) {
-    console.log(inputLength);
     event.preventDefault();
     return;
   } else {
@@ -122,7 +121,6 @@ function handleTypedLetter(currentWord, event) {
   );
 
   if (activeLetterIndex < currentWord.length) {
-    console.log(activeLetterIndex, activeWordIndex);
     if (currentWord[activeLetterIndex] === event.key) {
       currentLetter.className = "correct";
       scoreCorrectLetterTyped();
@@ -211,7 +209,6 @@ function shouldShift() {
   const fontSize = $("#words-pre").css("font-size");
   const lineHeight = parseFloat(fontSize.replace("px", "")) * LINE_HEIGHT;
   if (wordOffset - preOffset >= LINE_TO_SHIFT * lineHeight) {
-    console.log("SHIFT!");
     return true;
   } else {
     if (wordOffset - preOffset >= lineHeight) {
@@ -219,7 +216,6 @@ function shouldShift() {
         `word-${activeWordIndex - 1}`
       ).offsetTop;
       if (prevWordOffset != wordOffset) {
-        console.log("prev Line!!");
         lastIndexOnLine = activeWordIndex;
       }
     }
@@ -293,7 +289,6 @@ function refreshTest() {
   words.style["display"] = "";
   hideResults();
   inputArea.disabled = false;
-  console.log(inputArea.disabled);
   cursor.className = "";
 }
 
