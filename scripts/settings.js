@@ -18,9 +18,9 @@ const idTimeMap = {
 };
 
 function changeTime(event) {
-  clearAllActiveTimes();
+  window.localStorage.setItem("time", event.target.id);
   DURATION = idTimeMap[event.target.id][0];
-  event.target.classList.add("active");
+  underlineActiveOption();
 }
 
 function clearAllActiveTimes() {
@@ -29,4 +29,16 @@ function clearAllActiveTimes() {
   t60.classList.remove("active");
   t120.classList.remove("active");
   tCustom.classList.remove("active");
+}
+
+function initializeTime() {
+  window.localStorage.setItem("time", "t-60");
+  DURATION = idTimeMap["t-60"][0];
+  underlineActiveOption();
+}
+
+function underlineActiveOption() {
+  const time = window.localStorage.getItem("time");
+  clearAllActiveTimes();
+  idTimeMap[time][1].classList.add("active");
 }

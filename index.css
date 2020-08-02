@@ -28,8 +28,8 @@ html,
 #words-pre {
   height: 4em;
   line-height: 2em;
-  white-space: normal;
-  padding: 10px 1px;
+  white-space: pre-wrap;
+  padding: 1em 1px;
   font-size: 1em;
   min-width: 100%;
   letter-spacing: 0.01em;

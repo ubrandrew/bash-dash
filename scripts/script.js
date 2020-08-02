@@ -50,7 +50,7 @@ function createWords() {
     wordNode.id = `word-${i}`;
     const space = document.createElement("span");
     space.id = `space-${i}`;
-    space.innerText = " ";
+    space.innerHTML = " ";
     wordsPre.appendChild(wordNode);
     wordsPre.appendChild(space);
   }
@@ -78,7 +78,7 @@ function start(event) {
   if (event.code === "Space") {
     handleSpace(inputLength, currentWord, event);
   } else {
-    handleTypedLetter(currentWord, event.key);
+    handleTypedLetter(currentWord, event);
   }
 }
 
@@ -114,7 +114,7 @@ function handleSpace(inputLength, currentWord, event) {
   }
 }
 
-function handleTypedLetter(currentWord, key) {
+function handleTypedLetter(currentWord, event) {
   if (isNewTest()) startTimer(DURATION);
 
   const currentLetter = document.getElementById(
@@ -123,7 +123,7 @@ function handleTypedLetter(currentWord, key) {
 
   if (activeLetterIndex < currentWord.length) {
     console.log(activeLetterIndex, activeWordIndex);
-    if (currentWord[activeLetterIndex] === key) {
+    if (currentWord[activeLetterIndex] === event.key) {
       currentLetter.className = "correct";
       scoreCorrectLetterTyped();
     } else {
@@ -132,11 +132,15 @@ function handleTypedLetter(currentWord, key) {
     }
   } else {
     // extra letters typed
+    if (inputArea.value.length - currentWord.length >= 10) {
+      event.preventDefault();
+      return;
+    }
     const currentWordRef = document.getElementById(`word-${activeWordIndex}`);
     const newLetter = document.createElement("span");
     newLetter.id = `word-${activeWordIndex}-letter-${activeLetterIndex}`;
     newLetter.className = "incorrect-special";
-    newLetter.innerText = key;
+    newLetter.innerText = event.key;
     currentWordRef.appendChild(newLetter);
     scoreIncorrectLetterTyped();
   }
@@ -300,6 +304,12 @@ function handleKeyDown(event) {
 }
 
 function initialize() {
+  if (localStorage.getItem("time") === null) {
+    console.log("initializing");
+    initializeTime();
+  } else {
+    underlineActiveOption();
+  }
   createWords();
   updateCursorLocation();
   inputArea.focus();
