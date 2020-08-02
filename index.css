@@ -181,18 +181,22 @@ html,
   flex-grow: 1;
   cursor: default;
 }
+#text-select,
 #live-stats {
   float: right;
+}
+#text-select > select {
+  text-align-last: center;
 }
 
 #reset-btn {
   margin-top: 2em;
 }
 
-.setting-option {
+.time-option {
   cursor: pointer;
 }
 
-.setting-option.active {
+.time-option.active {
   border-bottom: 2px solid gray;
 }

@@ -272,7 +272,7 @@ function reset(e) {
   activeLetterIndex = 0;
   shiftIndex = 0;
   resetScores();
-  resetLiveStats();
+  //   resetLiveStats();
   refreshTest();
   updateCursorLocation();
   inputArea.focus();
@@ -311,7 +311,7 @@ function initialize() {
   inputArea.addEventListener("keypress", start, false);
   inputArea.addEventListener("keydown", handleKeyDown, false);
   resetBtn.addEventListener("click", reset, false);
-  words.addEventListener(
+  wordsPre.addEventListener(
     "click",
     () => {
       inputArea.focus();

@@ -2,12 +2,16 @@ const t15 = document.getElementById("t-15");
 const t30 = document.getElementById("t-30");
 const t60 = document.getElementById("t-60");
 const t120 = document.getElementById("t-120");
-const tCustom = document.getElementById("t-custom");
+const t180 = document.getElementById("t-180");
+const t300 = document.getElementById("t-300");
 
 t15.addEventListener("click", changeTime, false);
 t30.addEventListener("click", changeTime, false);
 t60.addEventListener("click", changeTime, false);
 t120.addEventListener("click", changeTime, false);
+t180.addEventListener("click", changeTime, false);
+t300.addEventListener("click", changeTime, false);
+
 // tCustom.addEventListener("click", changeTime, false);
 
 const idTimeMap = {
@@ -15,6 +19,8 @@ const idTimeMap = {
   "t-30": [30, t30],
   "t-60": [60, t60],
   "t-120": [120, t120],
+  "t-180": [180, t180],
+  "t-300": [300, t300],
 };
 
 function changeTime(event) {
@@ -28,7 +34,8 @@ function clearAllActiveTimes() {
   t30.classList.remove("active");
   t60.classList.remove("active");
   t120.classList.remove("active");
-  tCustom.classList.remove("active");
+  t180.classList.remove("active");
+  t300.classList.remove("active");
 }
 
 function initializeTime() {
@@ -47,3 +54,11 @@ function getDuration() {
   const time = window.localStorage.getItem("time");
   return idTimeMap[time][0];
 }
+
+$(".time-option").click(() => {
+  inputArea.focus();
+});
+
+$(".lang-option").select(() => {
+  inputArea.focus();
+});

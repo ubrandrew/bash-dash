@@ -9,8 +9,11 @@ function startTimer(duration) {
   interval = setInterval(tick, 100);
   function tick() {
     elapsedTime = Date.now() - startTime;
-    updateLiveStats();
-    if (elapsedTime >= duration * 1000) stopTimer();
+    // updateLiveStats();
+    if (elapsedTime >= duration * 1000) {
+      stopTimer();
+      stopTest();
+    }
   }
 }
 
@@ -18,6 +21,5 @@ function stopTimer() {
   clearInterval(interval);
   scoreLastWord(inputArea.value, wordsList[activeWordIndex]);
   running = false;
-  stopTest();
   printScores();
 }

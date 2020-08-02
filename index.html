@@ -26,15 +26,30 @@
         <div id="words" class="fade-in">
           <div class="settings-container">
             <div id="time-select">
-              time(s): <span class="setting-option" id="t-15">15</span> /
-              <span class="setting-option" id="t-30">30</span> /
-              <span class="setting-option" id="t-60">60</span> /
-              <span class="setting-option" id="t-120">120</span> /
-              <span class="setting-option" id="t-custom">custom</span>
+              time(s): <span class="time-option" id="t-15">15</span> /
+              <span class="time-option" id="t-30">30</span> /
+              <span class="time-option" id="t-60">60</span> /
+              <span class="time-option" id="t-120">120</span> /
+              <span class="time-option" id="t-180">180</span> /
+              <span class="time-option" id="t-300">300</span>
             </div>
-            <div id="live-stats">
-              wpm: <span id="live-wpm">--</span> / acc:
-              <span id="live-acc">--</span>
+            <div id="text-select">
+              prog lang:
+              <select>
+                <option class="lang-option">Python</option>
+                <option class="lang-option">JavaScript</option>
+                <option class="lang-option">Java</option>
+                <option class="lang-option">C/C++</option>
+                <option class="lang-option">Go</option>
+                <option class="lang-option">Ruby</option>
+                <option class="lang-option">TypeScript</option>
+                <option class="lang-option">Objective-C</option>
+                <option class="lang-option">Swift</option>
+                <option class="lang-option">English (normal)</option>
+                <option class="lang-option">English (advanced)</option>
+              </select>
+              <!-- wpm: <span id="live-wpm">--</span> / acc:
+              <span id="live-acc">--</span> -->
             </div>
           </div>
           <div id="cursor"></div>
