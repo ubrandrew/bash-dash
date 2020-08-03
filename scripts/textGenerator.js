@@ -3,6 +3,7 @@ function createWords() {
     const word = wordsList[i];
     const wordNode = createWordNode(word, i);
     wordNode.id = `word-${i}`;
+    // wordNode.classList.add("fade-in");
 
     const space = document.createElement("span");
     space.id = `space-${i}`;
@@ -25,12 +26,24 @@ function createWordNode(word, wordIdx) {
 }
 
 function generateText(length) {
+  const currentMode = getTest();
+  const currentLang = getLang();
+  let wordBank;
+  switch (currentLang) {
+    case "English (normal)":
+      wordBank = englishNormal;
+      break;
+    case "English (advanced)":
+      wordBank = englishAdvanced;
+      break;
+    default:
+      wordBank = pythonKeywords;
+  }
   let lst = [];
   for (let i = 0; i < length; i++) {
-    const randi = Math.floor(Math.random() * pythonKeywords.length);
-    const rand = pythonKeywords[randi];
+    const randi = Math.floor(Math.random() * wordBank.length);
+    const rand = wordBank[randi];
     lst.push(rand);
   }
-
   return lst;
 }

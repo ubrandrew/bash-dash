@@ -6,8 +6,6 @@ const t180 = document.getElementById("t-180");
 const codeOpt = document.getElementById("code");
 const keywordsOpt = document.getElementById("keywords");
 
-let currentType = "";
-
 t15.addEventListener("click", changeTime, false);
 t30.addEventListener("click", changeTime, false);
 t60.addEventListener("click", changeTime, false);
@@ -30,15 +28,24 @@ function getTime() {
   return idTimeMap[time][0];
 }
 
+function setTime(time) {
+  window.localStorage.setItem("time", time);
+  DURATION = idTimeMap[time][0];
+}
+
 function changeTime(event) {
-  window.localStorage.setItem("time", event.target.id);
-  DURATION = idTimeMap[event.target.id][0];
-  underlineActiveOption();
+  setTime(event.target.id);
+  underlineActiveTime();
+}
+
+function underlineActiveTime() {
+  const time = window.localStorage.getItem("time");
+  clearAllActiveTimes();
+  idTimeMap[time][1].classList.add("active");
 }
 
 function initializeTime() {
-  window.localStorage.setItem("time", "t-60");
-  DURATION = idTimeMap["t-60"][0];
+  setTime("t-60");
   underlineActiveOption();
 }
 
@@ -50,20 +57,17 @@ function clearAllActiveTimes() {
   t180.classList.remove("active");
 }
 
-function underlineActiveOption() {
-  const time = window.localStorage.getItem("time");
-  clearAllActiveTimes();
-  idTimeMap[time][1].classList.add("active");
-}
-
 function initializeLang() {
   setLang("Python");
 }
 
 function setLang(lang) {
   window.localStorage.setItem("lang", lang);
+  displaySelectedLanguage();
 }
-
+function getLang() {
+  return window.localStorage.getItem("lang");
+}
 function displaySelectedLanguage() {
   const item = window.localStorage.getItem("lang");
   $("#lang-select").val(item);
@@ -80,16 +84,19 @@ $("#lang-select").on("change", (e) => {
 
 function setTest(type) {
   window.localStorage.setItem("test-type", type);
-  currentType = type;
+}
+
+function getTest() {
+  return window.localStorage.getItem("test-type");
 }
 
 function changeTest(event) {
   setTest(event.target.innerText);
-  underlineActiveTestOption();
+  underlineActiveTest();
 }
 
-function underlineActiveTestOption() {
-  const type = window.localStorage.getItem("test-type");
+function underlineActiveTest() {
+  const type = getTest();
   clearAllActiveTestOptions();
   if (type === "code") {
     codeOpt.classList.add("active");
@@ -105,21 +112,20 @@ function clearAllActiveTestOptions() {
 
 function initializeTestType() {
   setTest("keywords");
-  underlineActiveTestOption();
+  underlineActiveTest();
 }
 
 $(".test-option").click(() => {
   inputArea.focus();
-  console.log(currentType);
-  if (currentType === "code") {
+  if (getTest() === "code") {
     document.getElementById("eng").disabled = true;
     document.getElementById("engA").disabled = true;
     const lang = window.localStorage.getItem("lang");
-    if (lang === "English (normal)" || lang === "English (advanced") {
+    if (lang === "English (normal)" || lang === "English (advanced)") {
       setLang("Python");
       displaySelectedLanguage();
     }
-  } else if (currentType === "keywords") {
+  } else if (getTest() === "keywords") {
     document.getElementById("eng").disabled = false;
     document.getElementById("engA").disabled = false;
   }

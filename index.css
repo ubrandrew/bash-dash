@@ -7,7 +7,7 @@ html,
 }
 
 * {
-  font-family: "Roboto mono", monospace;
+  font-family: "Inconsolata", monospace;
 }
 
 .main-content {
@@ -30,7 +30,7 @@ html,
   line-height: 2em;
   white-space: pre-wrap;
   padding: 1em 1px;
-  font-size: 1em;
+  font-size: 1.2em;
   min-width: 100%;
   letter-spacing: 0.01em;
 }
@@ -70,7 +70,7 @@ html,
 #cursor {
   position: absolute;
   width: 2px;
-  height: 1.25em;
+  height: 1.22em;
   background-color: purple;
   opacity: 1;
 }
@@ -187,6 +187,16 @@ html,
 }
 #lang-container {
   text-align-last: center;
+}
+
+#lang-select {
+  -webkit-appearance: none;
+
+  outline: none;
+  border: none;
+  background-color: #d6d4d47c;
+  padding: 0.25em;
+  border-radius: 0.4em;
 }
 
 #reset-btn {

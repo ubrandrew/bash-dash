@@ -20,16 +20,13 @@ const liveWPM = document.getElementById("live-wpm");
 const LINE_HEIGHT = 2;
 const LINE_TO_SHIFT = 2;
 const preOffset = wordsPre.offsetTop;
-const sampleText =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum";
 
 //////////////////////////////////////////////////////////////////////////
 // Test state                                                           //
 //////////////////////////////////////////////////////////////////////////
 let DURATION = 0;
 
-const wordsList = sampleText.split(" ");
-// const wordsList = generateText(500);
+let wordsList = null;
 
 let activeWordIndex = 0;
 let activeLetterIndex = 0;
@@ -40,16 +37,21 @@ let lastIndexOnLine = 0;
 // Functions                                                            //
 //////////////////////////////////////////////////////////////////////////
 
+function createNewTest() {
+  wordsList = generateText(500);
+  createWords();
+}
+
 function start(event) {
   let currentWord = wordsList[activeWordIndex];
   let currentInput = inputArea.value;
   let inputLength = currentInput.length;
   switch (event.code) {
     case "Enter":
-      return;
+      break;
     case "Space":
       handleSpace(inputLength, currentWord, event);
-      return;
+      break;
     default:
       cursor.className = "";
       handleTypedLetter(currentWord, event);
@@ -70,8 +72,9 @@ function handleSpace(inputLength, currentWord, event) {
     if (inputArea.value === currentWord) {
       scoreWord(currentWord);
     } else {
-      document.getElementById(`word-${activeWordIndex}`).className =
-        "incorrect-word";
+      document
+        .getElementById(`word-${activeWordIndex}`)
+        .classList.add("incorrect-word");
     }
     inputArea.value = "";
     activeWordIndex++;
@@ -95,10 +98,10 @@ function handleTypedLetter(currentWord, event) {
 
   if (activeLetterIndex < currentWord.length) {
     if (currentWord[activeLetterIndex] === event.key) {
-      currentLetter.className = "correct";
+      currentLetter.classList.add("correct");
       scoreCorrectLetterTyped();
     } else {
-      currentLetter.className = "incorrect";
+      currentLetter.classList.add("incorrect");
       scoreIncorrectLetterTyped();
     }
   } else {
@@ -158,7 +161,9 @@ function handleDeleteSpace() {
     // we need to see if the input is complete (or in excess) to see if the space was counted or not
     if (prevInput.length >= prevWord.length) scoreCorrectLetterDeleted();
     // else scoreIncorrectLetterDeleted();
-    document.getElementById(`word-${activeWordIndex}`).className = "";
+    document
+      .getElementById(`word-${activeWordIndex}`)
+      .classList.remove("incorrect-word", "correct");
     event.preventDefault();
   }
 }
@@ -222,11 +227,11 @@ function isNewTest() {
   return activeWordIndex == 0 && activeLetterIndex == 0 && !running;
 }
 
-function reset(e) {
+function reset() {
   stopTimer();
   wordsPre.innerHTML = "";
   inputArea.value = "";
-  createWords();
+  createNewTest();
   inputHistory = [];
   activeWordIndex = 0;
   activeLetterIndex = 0;
@@ -263,13 +268,13 @@ function initialize() {
     initializeTime();
   } else {
     DURATION = getTime();
-    underlineActiveOption();
+    underlineActiveTime();
   }
 
   if (localStorage.getItem("test-type") === null) {
     initializeTestType();
   } else {
-    underlineActiveTestOption();
+    underlineActiveTest();
   }
 
   if (localStorage.getItem("lang") === null) {
@@ -277,9 +282,9 @@ function initialize() {
   } else {
     displaySelectedLanguage();
   }
-  createWords();
+  createNewTest();
   updateCursorLocation();
-  inputArea.focus();
+  inputArea.onpaste = (e) => e.preventDefault();
   inputArea.addEventListener("keypress", start, false);
   inputArea.addEventListener("keydown", handleKeyDown, false);
   resetBtn.addEventListener("click", reset, false);
@@ -291,6 +296,7 @@ function initialize() {
     false
   );
   cursor.className = "run-animation";
+  inputArea.focus();
 }
 
 function showResults() {
@@ -346,5 +352,30 @@ $("#input-area").on("keydown", function (e) {
     resetBtn.focus();
     e.preventDefault();
     return false;
+  }
+});
+
+$(".time-option").click(() => {
+  inputArea.focus();
+});
+
+$("#lang-select").on("change", (e) => {
+  setLang(e.target.value);
+  reset();
+});
+
+$(".test-option").click(() => {
+  inputArea.focus();
+  if (getTest() === "code") {
+    document.getElementById("eng").disabled = true;
+    document.getElementById("engA").disabled = true;
+    const lang = window.localStorage.getItem("lang");
+    if (lang === "English (normal)" || lang === "English (advanced)") {
+      setLang("Python");
+      displaySelectedLanguage();
+    }
+  } else if (getTest() === "keywords") {
+    document.getElementById("eng").disabled = false;
+    document.getElementById("engA").disabled = false;
   }
 });

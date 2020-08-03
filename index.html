@@ -9,22 +9,23 @@
       src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"
       defer
     ></script>
-    <script src="scripts/test.js" defer></script>
+    <script src="scripts/python.js" defer></script>
+    <script src="scripts/englishWords.js" defer></script>
     <script src="scripts/timer.js" defer></script>
     <script src="scripts/scoring.js" defer></script>
     <script src="scripts/textGenerator.js" defer></script>
     <script src="scripts/settings.js" defer></script>
     <script src="scripts/script.js" defer></script>
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
     <div class="main-content">
       <div class="container">
-        <div id="words" class="fade-in">
-          <div class="settings-container">
+        <div id="words">
+          <div class="settings-container fade-in">
             <div id="time-select">
               time(s): <span class="time-option" id="t-15">15</span> /
               <span class="time-option" id="t-30">30</span> /
@@ -62,7 +63,7 @@
               <span id="live-acc">--</span> -->
             </div>
           </div>
-          <div id="cursor"></div>
+          <div id="cursor" class="fade-in"></div>
           <pre id="words-pre"></pre>
         </div>
         <div id="input-wrapper">
