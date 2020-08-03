@@ -1,4 +1,1 @@
-const fuck = `
-adfasdf
-asdfasdfa
-asdt`;
+class A {}

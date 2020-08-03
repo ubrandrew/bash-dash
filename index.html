@@ -30,23 +30,33 @@
               <span class="time-option" id="t-30">30</span> /
               <span class="time-option" id="t-60">60</span> /
               <span class="time-option" id="t-120">120</span> /
-              <span class="time-option" id="t-180">180</span> /
-              <span class="time-option" id="t-300">300</span>
+              <span class="time-option" id="t-180">180</span>
             </div>
-            <div id="text-select">
-              prog lang:
-              <select>
-                <option class="lang-option">Python</option>
-                <option class="lang-option">JavaScript</option>
-                <option class="lang-option">Java</option>
-                <option class="lang-option">C/C++</option>
-                <option class="lang-option">Go</option>
-                <option class="lang-option">Ruby</option>
-                <option class="lang-option">TypeScript</option>
-                <option class="lang-option">Objective-C</option>
-                <option class="lang-option">Swift</option>
-                <option class="lang-option">English (normal)</option>
-                <option class="lang-option">English (advanced)</option>
+            <div id="lang-container">
+              prog lang (<span class="test-option" id="keywords">keywords</span>
+              / <span class="test-option" id="code">code</span>):
+              <select id="lang-select">
+                <option class="lang-option" value="Python">Python</option>
+                <option class="lang-option" value="JavaScript"
+                  >JavaScript</option
+                >
+                <option class="lang-option" value="Java">Java</option>
+                <option class="lang-option" value="C/C++">C/C++</option>
+                <option class="lang-option" value="Go">Go</option>
+                <option class="lang-option" value="Ruby">Ruby</option>
+                <option class="lang-option" value="TypeScript"
+                  >TypeScript</option
+                >
+                <option class="lang-option" value="Objective-C"
+                  >Objective-C</option
+                >
+                <option class="lang-option" value="Swift">Swift</option>
+                <option class="lang-option" value="English (normal)" id="eng"
+                  >English (normal)</option
+                >
+                <option class="lang-option" value="English (advanced)" id="engA"
+                  >English (advanced)</option
+                >
               </select>
               <!-- wpm: <span id="live-wpm">--</span> / acc:
               <span id="live-acc">--</span> -->

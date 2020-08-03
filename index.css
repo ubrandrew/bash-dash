@@ -174,23 +174,23 @@ html,
 }
 .settings-container {
   display: flex;
-  padding-bottom: 0.5em;
+  padding-bottom: 2em;
 }
 
 #time-select {
   flex-grow: 1;
   cursor: default;
 }
-#text-select,
+#lang-container,
 #live-stats {
   float: right;
 }
-#text-select > select {
+#lang-container {
   text-align-last: center;
 }
 
 #reset-btn {
-  margin-top: 2em;
+  margin-top: 4em;
 }
 
 .time-option {
@@ -198,5 +198,13 @@ html,
 }
 
 .time-option.active {
+  border-bottom: 2px solid gray;
+}
+
+.test-option {
+  cursor: pointer;
+}
+
+.test-option.active {
   border-bottom: 2px solid gray;
 }

@@ -26,7 +26,7 @@ const sampleText =
 //////////////////////////////////////////////////////////////////////////
 // Test state                                                           //
 //////////////////////////////////////////////////////////////////////////
-let DURATION = getDuration();
+let DURATION = 0;
 
 const wordsList = sampleText.split(" ");
 // const wordsList = generateText(500);
@@ -35,50 +35,24 @@ let activeWordIndex = 0;
 let activeLetterIndex = 0;
 let inputHistory = [];
 let shiftIndex = 0;
-let current;
-let correctChars = 0;
-let incorrectChars = 0;
 let lastIndexOnLine = 0;
 //////////////////////////////////////////////////////////////////////////
 // Functions                                                            //
 //////////////////////////////////////////////////////////////////////////
 
-function createWords() {
-  for (let i = 0; i < wordsList.length; i++) {
-    const word = wordsList[i];
-    const wordNode = createWordNode(word, i);
-    wordNode.id = `word-${i}`;
-    const space = document.createElement("span");
-    space.id = `space-${i}`;
-    space.innerHTML = " ";
-    wordsPre.appendChild(wordNode);
-    wordsPre.appendChild(space);
-  }
-}
-
-function createWordNode(word, wordIdx) {
-  const wordNode = document.createElement("span");
-  for (let i = 0; i < word.length; i++) {
-    const letterNode = document.createElement("span");
-    letterNode.innerText = word[i];
-    letterNode.id = `word-${wordIdx}-letter-${i}`;
-    wordNode.appendChild(letterNode);
-  }
-  return wordNode;
-}
-
 function start(event) {
   let currentWord = wordsList[activeWordIndex];
   let currentInput = inputArea.value;
   let inputLength = currentInput.length;
-
-  if (event.code === "Enter") return;
-
-  cursor.className = "";
-  if (event.code === "Space") {
-    handleSpace(inputLength, currentWord, event);
-  } else {
-    handleTypedLetter(currentWord, event);
+  switch (event.code) {
+    case "Enter":
+      return;
+    case "Space":
+      handleSpace(inputLength, currentWord, event);
+      return;
+    default:
+      cursor.className = "";
+      handleTypedLetter(currentWord, event);
   }
 }
 
@@ -87,12 +61,11 @@ function handleSpace(inputLength, currentWord, event) {
     event.preventDefault();
     return;
   } else {
-    if (activeLetterIndex < currentWord.length) {
-      //   handleIncompleteWord();
-    } else {
+    if (activeLetterIndex >= currentWord.length) {
       // if word is completed or extra, still count space as correct
       scoreCorrectLetterTyped(); // count spaces as correct key
     }
+
     inputHistory.push(inputArea.value);
     if (inputArea.value === currentWord) {
       scoreWord(currentWord);
@@ -149,24 +122,8 @@ function handleTypedLetter(currentWord, event) {
 function handleDelete(event) {
   // checks if cursor to move to prev word
   if (activeLetterIndex === 0 && activeWordIndex > 0) {
-    const prevWord = wordsList[activeWordIndex - 1];
-    const prevInput = inputHistory[activeWordIndex - 1];
-    if (prevInput !== prevWord) {
-      activeWordIndex--;
-      activeLetterIndex = prevInput.length;
-      inputArea.value = inputHistory.pop();
-      //   undoHandleIncompleteWord();
-      updateCursorLocation();
-
-      // lengths of input and words are checked because words that are incomplete do not count spaces as correct
-      // we need to see if the input is complete (or in excess) to see if the space was counted or not
-      if (prevInput.length >= prevWord.length) scoreCorrectLetterDeleted();
-      document.getElementById(`word-${activeWordIndex}`).className = "";
-      event.preventDefault();
-      return;
-    }
-    // hcekc if prev word is correct
-    // if not correct, set as active word
+    handleDeleteSpace();
+    return;
   } else if (activeLetterIndex > 0) {
     activeLetterIndex--;
   }
@@ -187,18 +144,22 @@ function handleDelete(event) {
   updateCursorLocation();
 }
 
-// marks incompletely typed words as incorrect (should make a subset for extra and untryped words)
-function handleIncompleteWord() {
-  for (let i = activeLetterIndex; i < wordsList[activeWordIndex].length; i++) {
-    document.getElementById(`word-${activeWordIndex}-letter-${i}`).className =
-      "incorrect-special";
-  }
-}
+function handleDeleteSpace() {
+  const prevWord = wordsList[activeWordIndex - 1];
+  const prevInput = inputHistory[activeWordIndex - 1];
+  if (prevInput !== prevWord) {
+    activeWordIndex--;
+    activeLetterIndex = prevInput.length;
+    inputArea.value = inputHistory.pop();
+    //   undoHandleIncompleteWord();
+    updateCursorLocation();
 
-function undoHandleIncompleteWord() {
-  for (let i = activeLetterIndex; i < wordsList[activeWordIndex].length; i++) {
-    document.getElementById(`word-${activeWordIndex}-letter-${i}`).className =
-      "";
+    // lengths of input and words are checked because words that are incomplete do not count spaces as correct
+    // we need to see if the input is complete (or in excess) to see if the space was counted or not
+    if (prevInput.length >= prevWord.length) scoreCorrectLetterDeleted();
+    // else scoreIncorrectLetterDeleted();
+    document.getElementById(`word-${activeWordIndex}`).className = "";
+    event.preventDefault();
   }
 }
 
@@ -237,16 +198,17 @@ function updateCursorLocation() {
   let node = document.getElementById(
     `word-${activeWordIndex}-letter-${activeLetterIndex}`
   );
-  let newLeft;
-  let newTop;
+
   if (!node) {
     node = document.getElementById(`space-${activeWordIndex}`);
-    newLeft = node.offsetLeft - 1;
-    newTop = node.offsetTop;
-  } else {
-    newLeft = node.offsetLeft - 1;
-    newTop = node.offsetTop;
+    if (!node) {
+      return;
+    }
   }
+
+  let newLeft = node.offsetLeft - 1;
+  let newTop = node.offsetTop;
+
   $("#cursor").stop(true, true).animate(
     {
       top: newTop,
@@ -261,9 +223,7 @@ function isNewTest() {
 }
 
 function reset(e) {
-  //reset timer
   stopTimer();
-  console.log(inputHistory);
   wordsPre.innerHTML = "";
   inputArea.value = "";
   createWords();
@@ -300,10 +260,22 @@ function handleKeyDown(event) {
 
 function initialize() {
   if (localStorage.getItem("time") === null) {
-    console.log("initializing");
     initializeTime();
   } else {
+    DURATION = getTime();
     underlineActiveOption();
+  }
+
+  if (localStorage.getItem("test-type") === null) {
+    initializeTestType();
+  } else {
+    underlineActiveTestOption();
+  }
+
+  if (localStorage.getItem("lang") === null) {
+    initializeLang();
+  } else {
+    displaySelectedLanguage();
   }
   createWords();
   updateCursorLocation();
@@ -319,14 +291,6 @@ function initialize() {
     false
   );
   cursor.className = "run-animation";
-}
-
-function showCursor() {
-  $("#cursor").show();
-}
-
-function hideCursor() {
-  $("#cursor").hide();
 }
 
 function showResults() {
@@ -350,6 +314,13 @@ function hideResults() {
   $("#results").hide();
 }
 
+function showCursor() {
+  $("#cursor").show();
+}
+
+function hideCursor() {
+  $("#cursor").hide();
+}
 //////////////////////////////////////////////////////////////////////////
 // Initialization (called on start)                                     //
 //////////////////////////////////////////////////////////////////////////

@@ -1,79 +1,28 @@
-const pythonKeywords = [
-  "False",
-  "None",
-  "True",
-  "and",
-  "as",
-  "assert",
-  "async",
-  "await",
-  "break",
-  "class",
-  "continue",
-  "def",
-  "del",
-  "elif",
-  "else",
-  "except",
-  "finally",
-  "for",
-  "from",
-  "global",
-  "if",
-  "import",
-  "in",
-  "is",
-  "lambda",
-  "nonlocal",
-  "not",
-  "or",
-  "pass",
-  "raise",
-  "return",
-  "try",
-  "while",
-  "with",
-  "yield",
-  ":",
-  ",",
-  ".",
-  "[",
-  "]",
-  "!",
-  "+",
-  "-",
-  "*",
-  "/",
-  "%",
-  "**",
-  "//",
-  "#",
-  "=",
-  "+=",
-  "-=",
-  "*=",
-  "/=",
-  "%=",
-  "//=",
-  "**=",
-  "&=",
-  "|=",
-  "^=",
-  ">>=",
-  "<<=",
-  "==",
-  "<=",
-  ">=",
-  ">",
-  "<",
-  "!=",
-  "&",
-  "|",
-  "^",
-  "~",
-  "<<",
-  ">>",
-];
+function createWords() {
+  for (let i = 0; i < wordsList.length; i++) {
+    const word = wordsList[i];
+    const wordNode = createWordNode(word, i);
+    wordNode.id = `word-${i}`;
+
+    const space = document.createElement("span");
+    space.id = `space-${i}`;
+    space.innerHTML = " ";
+
+    wordsPre.appendChild(wordNode);
+    wordsPre.appendChild(space);
+  }
+}
+
+function createWordNode(word, wordIdx) {
+  const wordNode = document.createElement("span");
+  for (let i = 0; i < word.length; i++) {
+    const letterNode = document.createElement("span");
+    letterNode.innerText = word[i];
+    letterNode.id = `word-${wordIdx}-letter-${i}`;
+    wordNode.appendChild(letterNode);
+  }
+  return wordNode;
+}
 
 function generateText(length) {
   let lst = [];
