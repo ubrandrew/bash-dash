@@ -1,9 +1,20 @@
+:root {
+  --bg-color: #333a45;
+  --main-color: #f44c7f;
+  --cursor-color: #f44c7f;
+  --sub-color: #939eae;
+  --text-color: #e9ecf0;
+  --error-color: #da3333;
+  --error-extra-color: #fb7f7f;
+}
+
 body,
 html,
 .main-content {
   margin: 0;
   height: 100%;
   width: 100%;
+  background-color: var(--bg-color);
 }
 
 * {
@@ -30,25 +41,26 @@ html,
   line-height: 2em;
   white-space: pre-wrap;
   padding: 1em 1px;
-  font-size: 1.2em;
+  font-size: 1.15em;
   min-width: 100%;
   letter-spacing: 0.01em;
+  color: var(--sub-color);
 }
 
 .correct {
-  color: green;
+  color: var(--text-color);
 }
 
 .incorrect {
-  color: red;
+  color: var(--error-color);
 }
 
 .incorrect-special {
-  color: lightcoral;
+  color: var(--error-extra-color);
 }
 
 .incorrect-word {
-  text-decoration: underline solid coral;
+  text-decoration: underline solid var(--error-color);
 }
 
 .container {
@@ -71,7 +83,7 @@ html,
   position: absolute;
   width: 2px;
   height: 1.22em;
-  background-color: purple;
+  background-color: var(--cursor-color);
   opacity: 1;
 }
 
@@ -104,12 +116,13 @@ html,
   font-size: 2em;
   text-align: right;
   float: left;
+  color: var(--sub-color);
 }
 
 .stat {
   width: 50%;
   font-size: 2.5em;
-  color: indigo;
+  color: var(--main-color);
   float: right;
   padding-left: 50px;
 }
@@ -180,27 +193,47 @@ html,
 #time-select {
   flex-grow: 1;
   cursor: default;
+  color: var(--sub-color);
 }
+
 #lang-container,
 #live-stats {
   float: right;
 }
 #lang-container {
   text-align-last: center;
+  color: var(--sub-color);
 }
 
 #lang-select {
   -webkit-appearance: none;
-
+  color: var(--bg-color);
   outline: none;
   border: none;
-  background-color: #d6d4d47c;
+  background-color: var(--sub-color);
   padding: 0.25em;
   border-radius: 0.4em;
+  font-size: 1em;
+  font-weight: 700;
 }
 
 #reset-btn {
-  margin-top: 4em;
+  margin-top: 1em;
+  border: none;
+  background-color: var(--bg-color);
+  border-radius: 0.4em;
+  color: var(--sub-color);
+  padding: 1em;
+  font-weight: 600;
+  font-size: 1.25em;
+  cursor: pointer;
+}
+
+#reset-btn:hover,
+#reset-btn:focus {
+  color: var(--main-color);
+  background-color: var(--sub-color);
+  outline: none;
 }
 
 .time-option {
@@ -208,7 +241,9 @@ html,
 }
 
 .time-option.active {
-  border-bottom: 2px solid gray;
+  border-bottom: 2px solid var(--main-color);
+  color: var(--main-color);
+  font-weight: 700;
 }
 
 .test-option {
@@ -216,5 +251,46 @@ html,
 }
 
 .test-option.active {
-  border-bottom: 2px solid gray;
+  border-bottom: 2px solid var(--main-color);
+  color: var(--main-color);
+  font-weight: 700;
+}
+
+#progress-bar {
+  background-color: var(--main-color);
+  height: 1.1em;
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  opacity: 0.85;
+}
+
+#logo {
+  position: absolute;
+  top: 3%;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%; /* Need a specific value to work */
+  text-align: center;
+  color: var(--main-color);
+  font-size: 2em;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: "Roboto mono", monospace;
+}
+
+#themes {
+  position: absolute;
+  top: 3%;
+  right: 0;
+  width: 50%; /* Need a specific value to work */
+  text-align: center;
+  color: var(--sub-color);
+  font-size: 1em;
+  font-weight: 500;
+  cursor: pointer;
+  font-family: "Roboto mono", monospace;
 }

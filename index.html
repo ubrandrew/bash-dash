@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>bash-dash</title>
-    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" type="text/css" href="index.css" />
+    <link id="custom-style" rel="stylesheet" type="text/css" href="" />
     <script
       src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"
       defer
@@ -17,23 +18,34 @@
     <script src="scripts/settings.js" defer></script>
     <script src="scripts/script.js" defer></script>
     <link
-      href="https://fonts.googleapis.com/css2?family=Inconsolata&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@1,500&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
+    <div id="logo">bash-dash</div>
+    <div id="themes">
+      theme
+      <select
+        ><option>test</option></select
+      >
+    </div>
     <div class="main-content">
       <div class="container">
         <div id="words">
           <div class="settings-container fade-in">
-            <div id="time-select">
+            <div id="time-select" class="test-hide">
               time(s): <span class="time-option" id="t-15">15</span> /
               <span class="time-option" id="t-30">30</span> /
               <span class="time-option" id="t-60">60</span> /
               <span class="time-option" id="t-120">120</span> /
               <span class="time-option" id="t-180">180</span>
             </div>
-            <div id="lang-container">
+            <div id="lang-container" class="test-hide">
               prog lang (<span class="test-option" id="keywords">keywords</span>
               / <span class="test-option" id="code">code</span>):
               <select id="lang-select">
@@ -64,7 +76,7 @@
             </div>
           </div>
           <div id="cursor" class="fade-in"></div>
-          <pre id="words-pre"></pre>
+          <pre id="words-pre" class="fade-in"></pre>
         </div>
         <div id="input-wrapper">
           <input tabindex="0" id="input-area" />
@@ -84,9 +96,8 @@
           <div class="stat" id="accuracy"></div>
         </div>
       </div>
-      <div>
-        <button tabindex="0" id="reset-btn">Reset</button>
-      </div>
+      <button tabindex="0" id="reset-btn">Reset</button>
     </div>
+    <div id="progress-bar"></div>
   </body>
 </html>

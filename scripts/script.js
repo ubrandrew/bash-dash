@@ -90,7 +90,10 @@ function handleSpace(inputLength, currentWord, event) {
 }
 
 function handleTypedLetter(currentWord, event) {
-  if (isNewTest()) startTimer(DURATION);
+  if (isNewTest()) {
+    startTimer(DURATION);
+    $(".test-hide").animate({ opacity: 0 });
+  }
 
   const currentLetter = document.getElementById(
     `word-${activeWordIndex}-letter-${activeLetterIndex}`
@@ -236,6 +239,8 @@ function reset() {
   activeWordIndex = 0;
   activeLetterIndex = 0;
   shiftIndex = 0;
+  $(".test-hide").animate({ opacity: 1 });
+
   resetScores();
   //   resetLiveStats();
   refreshTest();
@@ -264,6 +269,8 @@ function handleKeyDown(event) {
 }
 
 function initialize() {
+  $("#progress-bar").hide();
+
   if (localStorage.getItem("time") === null) {
     initializeTime();
   } else {
