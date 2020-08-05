@@ -34,9 +34,14 @@ const pythonKeywords = [
   "while",
   "with",
   "yield",
+];
+
+const pythonSymbols = [
   ":",
   ",",
   ".",
+  "(",
+  ")",
   "[",
   "]",
   "!",
