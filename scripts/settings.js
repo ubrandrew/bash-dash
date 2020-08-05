@@ -46,7 +46,7 @@ function underlineActiveTime() {
 
 function initializeTime() {
   setTime("t-60");
-  underlineActiveOption();
+  underlineActiveTime();
 }
 
 function clearAllActiveTimes() {
@@ -72,15 +72,6 @@ function displaySelectedLanguage() {
   const item = window.localStorage.getItem("lang");
   $("#lang-select").val(item);
 }
-
-$(".time-option").click(() => {
-  inputArea.focus();
-});
-
-$("#lang-select").on("change", (e) => {
-  setLang(e.target.value);
-  inputArea.focus();
-});
 
 function setTest(type) {
   window.localStorage.setItem("test-type", type);
@@ -115,8 +106,7 @@ function initializeTestType() {
   underlineActiveTest();
 }
 
-$(".test-option").click(() => {
-  inputArea.focus();
+function toggleEnglishOptions() {
   if (getTest() === "code") {
     document.getElementById("eng").disabled = true;
     document.getElementById("engA").disabled = true;
@@ -129,4 +119,8 @@ $(".test-option").click(() => {
     document.getElementById("eng").disabled = false;
     document.getElementById("engA").disabled = false;
   }
+}
+$(".test-option").click(() => {
+  inputArea.focus();
+  toggleEnglishOptions();
 });

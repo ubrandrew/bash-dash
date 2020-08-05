@@ -4,37 +4,34 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>bash-dash</title>
+    <link
+      id="custom-style"
+      rel="stylesheet"
+      type="text/css"
+      href="themes/8008.css"
+    />
     <link rel="stylesheet" type="text/css" href="index.css" />
-    <link id="custom-style" rel="stylesheet" type="text/css" href="" />
-    <script
-      src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"
-      defer
-    ></script>
-    <script src="scripts/python.js" defer></script>
-    <script src="scripts/englishWords.js" defer></script>
-    <script src="scripts/timer.js" defer></script>
-    <script src="scripts/scoring.js" defer></script>
-    <script src="scripts/textGenerator.js" defer></script>
-    <script src="scripts/settings.js" defer></script>
-    <script src="scripts/script.js" defer></script>
+    <link rel="stylesheet" type="text/css" href="styles/themeSelect.css" />
+
     <link
       href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@200;300;400;500;600;700;800;900&display=swap"
       rel="stylesheet"
     />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@1,500&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Exo+2:wght@500&display=swap"
       rel="stylesheet"
     />
   </head>
   <body>
     <div id="logo">bash-dash</div>
-    <div id="themes">
-      theme
-      <select
-        ><option>test</option></select
-      >
-    </div>
     <div class="main-content">
+      <div id="themes" class="test-hide">
+        <div id="theme-label">theme</div>
+        <div class="select-container">
+          <div class="selected">selected elem</div>
+          <div class="options-container"></div>
+        </div>
+      </div>
       <div class="container">
         <div id="words">
           <div class="settings-container fade-in">
@@ -99,5 +96,14 @@
       <button tabindex="0" id="reset-btn">Reset</button>
     </div>
     <div id="progress-bar"></div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script src="scripts/python.js"></script>
+    <script src="scripts/englishWords.js"></script>
+    <script src="scripts/timer.js"></script>
+    <script src="scripts/scoring.js"></script>
+    <script src="scripts/textGenerator.js"></script>
+    <script src="scripts/settings.js"></script>
+    <script src="scripts/themeSelect.js"></script>
+    <script src="scripts/script.js"></script>
   </body>
 </html>

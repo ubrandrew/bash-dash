@@ -37,6 +37,52 @@ let lastIndexOnLine = 0;
 // Functions                                                            //
 //////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////////////
+// Initialization (called on start)                                     //
+//////////////////////////////////////////////////////////////////////////
+window.addEventListener("load", (event) => {
+  if (localStorage.getItem("theme") === null) {
+    setTheme("8008");
+    setSelectActiveTheme();
+  } else {
+    setTheme(getTheme());
+    setSelectActiveTheme();
+  }
+});
+
+initialize();
+
+//////////////////////////////////////////////////////////////////////////
+// misc handlers                                                        //
+//////////////////////////////////////////////////////////////////////////
+
+$("#input-area")
+  .focusin(function () {
+    showCursor();
+  })
+  .focusout(function () {
+    hideCursor();
+  });
+
+// necessary for safari tabbing to work (keycode 9 = tab)
+// whenever tab is pressed while input-area is in focus, focus reset button
+$("#input-area").on("keydown", function (e) {
+  if (e.keyCode == 9) {
+    resetBtn.focus();
+    e.preventDefault();
+    return false;
+  }
+});
+
+$(".time-option").click(() => {
+  inputArea.focus();
+});
+
+$("#lang-select").on("change", (e) => {
+  setLang(e.target.value);
+  reset();
+});
+
 function createNewTest() {
   wordsList = generateText(500);
   createWords();
@@ -270,6 +316,7 @@ function handleKeyDown(event) {
 
 function initialize() {
   $("#progress-bar").hide();
+  toggleEnglishOptions();
 
   if (localStorage.getItem("time") === null) {
     initializeTime();
@@ -334,55 +381,3 @@ function showCursor() {
 function hideCursor() {
   $("#cursor").hide();
 }
-//////////////////////////////////////////////////////////////////////////
-// Initialization (called on start)                                     //
-//////////////////////////////////////////////////////////////////////////
-
-initialize();
-
-//////////////////////////////////////////////////////////////////////////
-// misc handlers                                                        //
-//////////////////////////////////////////////////////////////////////////
-
-$("#input-area")
-  .focusin(function () {
-    showCursor();
-  })
-  .focusout(function () {
-    hideCursor();
-  });
-
-// necessary for safari tabbing to work (keycode 9 = tab)
-// whenever tab is pressed while input-area is in focus, focus reset button
-$("#input-area").on("keydown", function (e) {
-  if (e.keyCode == 9) {
-    resetBtn.focus();
-    e.preventDefault();
-    return false;
-  }
-});
-
-$(".time-option").click(() => {
-  inputArea.focus();
-});
-
-$("#lang-select").on("change", (e) => {
-  setLang(e.target.value);
-  reset();
-});
-
-$(".test-option").click(() => {
-  inputArea.focus();
-  if (getTest() === "code") {
-    document.getElementById("eng").disabled = true;
-    document.getElementById("engA").disabled = true;
-    const lang = window.localStorage.getItem("lang");
-    if (lang === "English (normal)" || lang === "English (advanced)") {
-      setLang("Python");
-      displaySelectedLanguage();
-    }
-  } else if (getTest() === "keywords") {
-    document.getElementById("eng").disabled = false;
-    document.getElementById("engA").disabled = false;
-  }
-});
