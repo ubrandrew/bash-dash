@@ -33,9 +33,6 @@ let activeLetterIndex = 0;
 let inputHistory = [];
 let shiftIndex = 0;
 let lastIndexOnLine = 0;
-//////////////////////////////////////////////////////////////////////////
-// Functions                                                            //
-//////////////////////////////////////////////////////////////////////////
 
 //////////////////////////////////////////////////////////////////////////
 // Initialization (called on start)                                     //
@@ -82,6 +79,14 @@ $("#lang-select").on("change", (e) => {
   setLang(e.target.value);
   reset();
 });
+
+$(".test-option").on("click", (e) => {
+  reset();
+});
+
+//////////////////////////////////////////////////////////////////////////
+// Functions                                                            //
+//////////////////////////////////////////////////////////////////////////
 
 function createNewTest() {
   wordsList = generateText(500);
